@@ -35,6 +35,9 @@ async def on_message(message):
     audio_lock = False
     if message.author == client.user:
         return
+    print("message author:" + message.author.name)
+    
+        
     print("input text:", text)
     msg = ''
     if text[0] == '!G':
@@ -107,10 +110,15 @@ async def on_message(message):
         if rand_num == '100':
             msg = '**' + str(msg) + '**' 
         await client.send_message(message.channel, msg)
+    elif text[0] == 'sleep' and text[1] == 'tite' and text[2] == 'goblin' and message.author.name == "Xelasari":
+        msg = "All in a day's work"
+        await client.send_message(message.channel, msg)
+        client.close()
+        exit()
     else:
         return
     
-    
+        
 #def roll_range(x, y):
 #    #msg = message.author.name + " rolled a: "
 #    msg += str(random.randrange(x, y))
