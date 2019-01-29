@@ -57,18 +57,47 @@ class spell_lookup_goblin:
         
         msg = ""
         
+        msg += '__**'
         msg += hold_str.replace('+', ' ')
+        msg += '**__'
         msg += '\n'
         
         
         
         if text[-1] == 'desc':
             msg += '```' 
+            msg += 'Description: '
             msg += spell_details['desc'][0].replace('â€™', '\'')
+            msg += '\n\n'
+            msg += 'At Higher Levels:'
+            msg += spell_details['higher_level'][0].replace('â€™', '\'')
             msg += '```'
         elif text[-1] == 'range':
             msg += '```'
+            msg += 'Range: '
             msg += spell_details['range']
+            msg += '```'
+        elif text[-1] == 'duration':
+            msg += '```'
+            msg += 'Duration: '
+            msg += spell_details['duration']
+            msg += '```'
+        elif text[-1] == 'cast_time':
+            msg += '```'
+            msg += 'Casting Time: '
+            msg += spell_details['casting_time']
+            msg += '```'
+        elif text[-1] == 'components':
+            components = spell_details['components']
+            msg += '```'
+            msg += 'Components: '
+            if 'V' in components:
+                msg += 'Verbal | '
+            if 'S' in components:
+                msg += 'Somatic | '
+            if 'M' in components:
+                msg += 'Material | '
+            msg = msg[:-3]
             msg += '```'
         else:
             msg = 'No specifier provided.'

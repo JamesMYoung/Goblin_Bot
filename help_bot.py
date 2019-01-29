@@ -61,7 +61,10 @@ class help_goblin:
         msg += "__**Spell Lookup**__\n"
         msg += "```"
         msg += "!G lookup spell [spell name] desc will return a description of the specified spell.\n"
-        msg += "!G lookup spell [spell name] range will return the range of the specified range.\n"
+        msg += "!G lookup spell [spell name] range will return the range of the specified spell.\n"
+        msg += "!G lookup spell [spell name] duration will return the duration of the specified spell\n"
+        msg += "!G lookup spell [spell name] cast_time will return the casting time of the specified spell\n"
+        msg += "!G lookup spell [spell name] components will return the required components of the specified spell\n"
         msg += "```"
         msg += "\n"
         
