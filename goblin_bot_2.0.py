@@ -50,67 +50,66 @@ async def on_message(message):
             msg = Health_Goblin.create_output(text)
             
         await client.send_message(message.channel, msg)
+    elif text[0] == '!Gflip':
+        msg = '```The impartial goblin flips a coin and gets '
+        if(random.randrange(0, 1) == 0):
+            msg += "<heads>"
+        else:
+            msg += "<tails>"
+        msg += ' as the result.```'
+        await client.send_message(message.channel, msg)
+    elif text[0] == '!G4':
+        msg = message.author.name + " rolled a: "
+        rand_num = str(random.randrange(1, 5))
+        msg += rand_num
+        if rand_num == '4':
+            msg = '**' + str(msg) + '**' 
+        await client.send_message(message.channel, msg)
+    elif text[0] == '!G6':
+        msg = message.author.name + " rolled a: "
+        rand_num = str(random.randrange(1, 7))
+        msg += rand_num
+        if rand_num == '6':
+            msg = '**' + str(msg) + '**' 
+        await client.send_message(message.channel, msg)
+    elif text[0] == '!G8':
+        msg = message.author.name + " rolled a: "
+        rand_num = str(random.randrange(1, 9))
+        msg += rand_num
+        if rand_num == '8':
+            msg = '**' + str(msg) + '**' 
+        await client.send_message(message.channel, msg)
+    elif text[0] == '!G10':
+        msg = message.author.name + " rolled a: "
+        rand_num = str(random.randrange(1, 11))
+        msg += rand_num
+        if rand_num == '10':
+            msg = '**' + str(msg) + '**' 
+        await client.send_message(message.channel, msg)
+    elif text[0] == '!G12':
+        msg = message.author.name + " rolled a: "
+        rand_num = str(random.randrange(1, 13))
+        msg += rand_num
+        if rand_num == '12':
+            msg = '**' + str(msg) + '**' 
+        await client.send_message(message.channel, msg)
+    elif text[0] == '!G20':
+        msg = message.author.name + " rolled a: "
+        rand_num = str(random.randrange(1, 21))
+        msg += rand_num
+        if rand_num == '20':
+            msg = '**' + str(msg) + '**' 
+        await client.send_message(message.channel, msg)
+    elif text[0] == '!G100':
+        msg = message.author.name + " rolled a: "
+        rand_num = str(random.randrange(1, 101))
+        msg += rand_num
+        if rand_num == '100':
+            msg = '**' + str(msg) + '**' 
+        await client.send_message(message.channel, msg)
     else:
         return
     
-    
-    #if text[0] == '!Gflip':
-    #    msg = '```The impartial goblin flips a coin and gets '
-    #    if(random.randrange(0, 1) == 0):
-    #        msg += "heads"
-    #    else:
-    #        msg += "tails"
-    #    msg += ' as the result.```'
-    #    await client.send_message(message.channel, msg)
-    #if text[0] == '!G4':
-    #    msg = message.author.name + " rolled a: "
-    #    rand_num = str(random.randrange(1, 5))
-    #    msg += rand_num
-    #    if rand_num == '4':
-    #        msg = '**' + str(msg) + '**' 
-    #    await client.send_message(message.channel, msg)
-    #if text[0] == '!G6':
-    #    msg = message.author.name + " rolled a: "
-    #    rand_num = str(random.randrange(1, 7))
-    #    msg += rand_num
-    #    if rand_num == '6':
-    #        msg = '**' + str(msg) + '**' 
-    #    await client.send_message(message.channel, msg)
-    #if text[0] == '!G8':
-    #    msg = message.author.name + " rolled a: "
-    #    rand_num = str(random.randrange(1, 9))
-    #    msg += rand_num
-    #    if rand_num == '8':
-    #        msg = '**' + str(msg) + '**' 
-    #    await client.send_message(message.channel, msg)
-    #if text[0] == '!G10':
-    #    msg = message.author.name + " rolled a: "
-    #    rand_num = str(random.randrange(1, 11))
-    #    msg += rand_num
-    #    if rand_num == '10':
-    #        msg = '**' + str(msg) + '**' 
-    #    await client.send_message(message.channel, msg)
-    #if text[0] == '!G12':
-    #    msg = message.author.name + " rolled a: "
-    #    rand_num = str(random.randrange(1, 13))
-    #    msg += rand_num
-    #    if rand_num == '12':
-    #        msg = '**' + str(msg) + '**' 
-    #    await client.send_message(message.channel, msg)
-    #if text[0] == '!G20':
-    #    msg = message.author.name + " rolled a: "
-    #    rand_num = str(random.randrange(1, 21))
-    #    msg += rand_num
-    #    if rand_num == '20':
-    #        msg = '**' + str(msg) + '**' 
-    #    await client.send_message(message.channel, msg)
-    #if text[0] == '!G100':
-    #    msg = message.author.name + " rolled a: "
-    #    rand_num = str(random.randrange(1, 101))
-    #    msg += rand_num
-    #    if rand_num == '100':
-    #        msg = '**' + str(msg) + '**' 
-    #    await client.send_message(message.channel, msg)
     
 #def roll_range(x, y):
 #    #msg = message.author.name + " rolled a: "
@@ -128,19 +127,14 @@ async def on_ready():
     print('------')
     game = discord.Game(name="Searching for Gold")
     await client.change_presence(game=game)
-
     global Roll_Goblin 
     Roll_Goblin = roll_goblin()
-
     global Help_Goblin 
     Help_Goblin = help_goblin()
-
     global Spell_Lookup_Goblin 
     Spell_Lookup_Goblin = spell_lookup_goblin()
-
     global Misc_Goblin 
     Misc_Goblin = misc_goblin()
-
     global Health_Goblin
     Health_Goblin = health_goblin()
 

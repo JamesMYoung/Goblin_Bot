@@ -1,7 +1,30 @@
 class health_goblin:
     def __init__(self):
-        self.entities = []
         print("Health Goblin Created")
+        self.entities = []
+        self.fp = open("player_health.data", "r+")
+        for line in self.fp:
+            words = line.split()
+            entity = {}
+            entity['name'] = words[0]
+            entity['hp'] = int(words[1])
+            entity['max_hp'] = int(words[2])
+            self.entities.append(entity)
+            print("Added:" + entity['name'] + "(" + str(entity['hp']) + "/" + str(entity['max_hp']) + ")")
+        
+        
+        
+    def __del__(self):
+        self.fp.seek(0)
+        self.fp.truncate(0)
+        for entity in self.entities:
+            hold_str = ""
+            hold_str = entity['name'] + " " + str(entity['hp']) + " " + str(entity['max_hp']) + "\n"
+            self.fp.write(hold_str)
+        self.fp.close()
+        
+        pass
+        
     def create_output(self, text):
         msg = ''
         
@@ -100,6 +123,8 @@ class health_goblin:
                 entity['hp'] += int(text[4])
                 if entity['hp'] > entity['max_hp']:
                     entity['hp'] = entity['max_hp']
+                if entity['hp'] < 0:
+                    entity['hp'] = 0
                 msg += '```'
                 msg += entity['name']
                 msg += ' restored '
@@ -124,6 +149,8 @@ class health_goblin:
         for entity in self.entities:
             if entity['name'] == text[3]:
                 entity['hp'] -= int(text[4])
+                if entity['hp'] > entity['max_hp']:
+                    entity['hp'] = entity['max_hp']
                 if entity['hp'] < 0:
                     entity['hp'] = 0
 
