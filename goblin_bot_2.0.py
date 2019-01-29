@@ -113,8 +113,8 @@ async def on_message(message):
     elif text[0] == 'sleep' and text[1] == 'tite' and text[2] == 'goblin' and message.author.name == "Xelasari":
         msg = "All in a day's work"
         await client.send_message(message.channel, msg)
-        client.close()
-        exit()
+        await client.logout()
+        
     else:
         return
     
