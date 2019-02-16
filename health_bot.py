@@ -40,7 +40,8 @@ class health_goblin:
             msg = self.heal_entity(text)
         if text[2] == 'hurt':
             msg = self.hurt_entity(text)
-            
+        if text[2] == 'long' and text[3] == 'rest':
+            msg = self.long_rest(text)
             
         return msg
     
