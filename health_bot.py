@@ -172,3 +172,13 @@ class health_goblin:
         msg += '```'
         
         return msg
+        
+    def long_rest(self, text):
+        msg = ''
+        msg += '```'
+        for entity in self.entities:
+            entity['hp'] = entity['max_hp']
+        msg += 'All entities healed to full health'
+        msg += '```'
+        
+        return msg
