@@ -1,3 +1,5 @@
+import random
+
 class misc_goblin:
     def __init__(self):
         self.fp = open("gold.data", "r+")
@@ -18,6 +20,8 @@ class misc_goblin:
             msg = self.give_goblin(text)
         if text[1] == 'take':
             msg = self.take_goblin(text)
+        if text[1] == 'uwu':
+            msg = self.uwu(text)
             
         return msg
     
@@ -38,3 +42,7 @@ class misc_goblin:
             msg = "```The goblin hits you over the head with his bag of gold, and you lose 10 good boy points.```"
         return msg
         
+    def uwu(self, text):
+        msg = ''
+        msg += str(random.choice(['uwu','owo','OwO']))
+        return msg

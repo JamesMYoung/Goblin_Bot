@@ -1,3 +1,5 @@
+import random
+
 class health_goblin:
     def __init__(self):
         print("Health Goblin Created")
@@ -9,8 +11,12 @@ class health_goblin:
             entity['name'] = words[0]
             entity['hp'] = int(words[1])
             entity['max_hp'] = int(words[2])
+            entity['temp_hp'] = int(words[3])
             self.entities.append(entity)
-            print("Added:" + entity['name'] + "(" + str(entity['hp']) + "/" + str(entity['max_hp']) + ")")
+            print("Added:" + entity['name'] + "("
+                           + str(entity['hp']) + "/"
+                           + str(entity['max_hp']) + ") - temp_hp: "
+                           + str(entity['temp_hp']))
         
         
         
@@ -19,7 +25,7 @@ class health_goblin:
         self.fp.truncate(0)
         for entity in self.entities:
             hold_str = ""
-            hold_str = entity['name'] + " " + str(entity['hp']) + " " + str(entity['max_hp']) + "\n"
+            hold_str = entity['name'] + " " + str(entity['hp']) + " " + str(entity['max_hp']) + " " + str(entity['temp_hp']) + "\n"
             self.fp.write(hold_str)
         self.fp.close()
         
@@ -42,6 +48,8 @@ class health_goblin:
             msg = self.hurt_entity(text)
         if text[2] == 'long' and text[3] == 'rest':
             msg = self.long_rest(text)
+        if text[2] == 'temp':
+            msg = self.temp_health(text)
             
         return msg
     
@@ -57,6 +65,7 @@ class health_goblin:
         entity['name'] = name
         entity['max_hp'] = max_hp
         entity['hp'] = hp
+        entity['temp_hp'] = 0
         
         
         #need to add duplicate checking here
@@ -111,7 +120,11 @@ class health_goblin:
             	msg += str(entity['hp'])
             	msg += '/'
             	msg += str(entity['max_hp'])
-            	msg += ')\n'
+            	msg += ')'
+            	if entity['temp_hp'] > 0:
+            	    msg += ' - Temp HP: '
+            	    msg += str(entity['temp_hp'])
+            	msg += '\n'
             
         msg += '```'
         return msg
@@ -147,13 +160,37 @@ class health_goblin:
 
     def hurt_entity(self, text):
         msg = ''
+        death_flag = False
         for entity in self.entities:
             if entity['name'] == text[3]:
-                entity['hp'] -= int(text[4])
+                #if temp > 0, sub from temp
+                #else normal health calculation
+                if entity['temp_hp'] > 0:
+                    #if damage is greater than temp_hp
+                    #subtract temp hp from damage, remove remaining damage
+                    #from player hp
+                    if int(text[4]) > entity['temp_hp']:
+                        remaining_damage = int(text[4]) - entity['temp_hp'] 
+                        entity['temp_hp'] = 0
+                        entity['hp'] -= remaining_damage
+                    #if damage == temp_hp
+                    #set temp hp = 0
+                    elif int(text[4]) == entity['temp_hp']:
+                        entity['temp_hp'] = 0
+                    #if damage < temp_hp
+                    #subtract only from temp_hp
+                    else:
+                        entity['temp_hp'] -= int(text[4])
+                        
+                    
+                else:
+                    entity['hp'] -= int(text[4])
+                    
                 if entity['hp'] > entity['max_hp']:
                     entity['hp'] = entity['max_hp']
                 if entity['hp'] < 0:
                     entity['hp'] = 0
+                    death_flag = True
 
                 msg += '```'
                 msg += entity['name']
@@ -163,8 +200,16 @@ class health_goblin:
                 msg += str(entity['hp'])
                 msg += '/'
                 msg += str(entity['max_hp'])
-                msg += ')```'
-
+                msg += ')'
+                if entity['temp_hp'] > 0:
+                    msg += ' - Temp HP: '
+                    msg += str(entity['temp_hp'])
+                
+                msg += '```'
+                
+                if death_flag == True:
+                    msg += str(random.choice(['OH SHIT','OH FUCK','HOT DAMN','DANGER']))
+                    
                 return msg
             
         #should only reach this point if no entity is found
@@ -174,12 +219,40 @@ class health_goblin:
         
         return msg
         
+    #this function for adding temp HP
+    def temp_health(self, text):
+        msg = ''
+        for entity in self.entities:
+            if entity['name'] == text[3]:
+                entity['temp_hp'] = int(text[4])
+            msg += '```'
+            msg += 'Temporary HP for '
+            msg += entity['name']
+            msg += ' set to '
+            msg += text[4]
+            msg += '```'
+            
+            return msg
+            
+        #should only reach this point if no entity is found
+        msg += '```'
+        msg += 'Entity not found'
+        msg += '```'
+        
+        return msg
+        
     def long_rest(self, text):
+        temp_flag = False
         msg = ''
         msg += '```'
         for entity in self.entities:
             entity['hp'] = entity['max_hp']
+            if entity['temp_hp'] > 0:
+                entity['temp_hp'] = 0
+                temp_flag = True
         msg += 'All entities healed to full health'
+        if temp_flag == True:
+            msg += '\nTemporary hit points removed'
         msg += '```'
         
         return msg
