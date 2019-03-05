@@ -69,8 +69,10 @@ class spell_lookup_goblin:
             msg += 'Description: '
             msg += spell_details['desc'][0].replace('â€™', '\'')
             msg += '\n\n'
-            msg += 'At Higher Levels:'
-            msg += spell_details['higher_level'][0].replace('â€™', '\'')
+            #if spell_details['higher_level'][0] != None:
+            if 'higher_level' in spell_details:
+                msg += 'At Higher Levels:'
+                msg += spell_details['higher_level'][0].replace('â€™', '\'')
             msg += '```'
         elif text[-1] == 'range':
             msg += '```'

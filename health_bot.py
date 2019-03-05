@@ -11,7 +11,8 @@ class health_goblin:
             entity['name'] = words[0]
             entity['hp'] = int(words[1])
             entity['max_hp'] = int(words[2])
-            entity['temp_hp'] = int(words[3])
+            entity['true_max'] = int(words[3])
+            entity['temp_hp'] = int(words[4])
             self.entities.append(entity)
             print("Added:" + entity['name'] + "("
                            + str(entity['hp']) + "/"
@@ -25,7 +26,11 @@ class health_goblin:
         self.fp.truncate(0)
         for entity in self.entities:
             hold_str = ""
-            hold_str = entity['name'] + " " + str(entity['hp']) + " " + str(entity['max_hp']) + " " + str(entity['temp_hp']) + "\n"
+            hold_str += entity['name'] + " " 
+            hold_str += str(entity['hp']) + " "
+            hold_str += str(entity['max_hp']) + " "
+            hold_str += str(entity['true_max']) + " "
+            hold_str += str(entity['temp_hp']) + "\n"
             self.fp.write(hold_str)
         self.fp.close()
         
@@ -50,6 +55,14 @@ class health_goblin:
             msg = self.long_rest(text)
         if text[2] == 'temp':
             msg = self.temp_health(text)
+        if text[2] == 'reduce':
+            msg = self.reduce_max(text)
+        if text[2] == 'restore':
+            msg = self.restore_max(text)
+        if text[2] == 'set' and text[3] == 'max':
+            msg = self.set_max_hp(text)
+        
+        
             
         return msg
     
@@ -141,13 +154,19 @@ class health_goblin:
                     entity['hp'] = 0
                 msg += '```'
                 msg += entity['name']
-                msg += ' restored '
+                msg += ' healed for '
                 msg += text[4]
                 msg += ' health ('
                 msg += str(entity['hp'])
                 msg += '/'
                 msg += str(entity['max_hp'])
-                msg += ')```'
+                msg += ')'
+                
+                if entity['temp_hp'] > 0:
+                    msg += ' - Temp HP: '
+                    msg += str(entity['temp_hp'])
+                
+                msg += '```'
                 
                 return msg
 
@@ -219,21 +238,128 @@ class health_goblin:
         
         return msg
         
+    #Should reduce max_hp, but leave true_max untouched
+    def reduce_max(self, text):
+        msg = ''
+        for entity in self.entities:
+            if entity['name'] == text[3]:
+                nervous_flag = False
+                entity['max_hp'] -= int(text[4])
+                
+                #may want to output this to player, but if they
+                #reach this point, it's bad news bears
+                if entity['max_hp'] < 0:
+                    entity['max_hp'] = 0
+                    nervous_flag = True
+                if entity['hp'] > entity['max_hp']:
+                    entity['hp'] = entity['max_hp']
+                    
+                msg += '```'
+                msg += 'Maximum health for '
+                msg += entity['name']
+                msg += ' reduced by '
+                msg += text[4]
+                
+                msg += ' ('
+                msg += str(entity['hp'])
+                msg += '/'
+                msg += str(entity['max_hp'])
+                msg += ')'
+                
+                msg += '```'
+                
+                if nervous_flag is True:
+                    msg += '*nervous laughter*'
+                
+                return msg
+                
+        #should only reach this point if no entity is found
+        msg += '```'
+        msg += 'Entity not found'
+        msg += '```'
+        
+        return msg
+        
+    #Should restore max_hp, but leave true_max untouched
+    def restore_max(self, text):
+        msg = ''
+        for entity in self.entities:
+            if entity['name'] == text[3]:
+                amount = int(text[4])
+                
+                entity['max_hp'] += amount
+                
+                
+                
+                #might want to create text output to ensure that this
+                #is conveyed to player
+                if entity['max_hp'] > entity['true_max']:
+                    amount = amount + entity['true_max'] - entity['max_hp'] 
+                    entity['max_hp'] = entity['true_max']
+                    
+                msg += '```'
+                msg += 'Maximum health for '
+                msg += entity['name']
+                msg += ' restored by '
+                msg += str(amount)
+                
+                msg += ' ('
+                msg += str(entity['hp'])
+                msg += '/'
+                msg += str(entity['max_hp'])
+                msg += ')'
+                
+                msg += '```'
+                
+                return msg
+                
+        #should only reach this point if no entity is found
+        msg += '```'
+        msg += 'Entity not found'
+        msg += '```'
+        
+        return msg
+        
     #this function for adding temp HP
     def temp_health(self, text):
         msg = ''
         for entity in self.entities:
+            
             if entity['name'] == text[3]:
                 entity['temp_hp'] = int(text[4])
-            msg += '```'
-            msg += 'Temporary HP for '
-            msg += entity['name']
-            msg += ' set to '
-            msg += text[4]
-            msg += '```'
+                msg += '```'
+                msg += 'Temporary HP for '
+                msg += entity['name']
+                msg += ' set to '
+                msg += text[4]
+                msg += '```'
             
-            return msg
+                return msg
             
+        #should only reach this point if no entity is found
+        msg += '```'
+        msg += 'Entity not found'
+        msg += '```'
+        
+        return msg
+        
+    #This should typically only be invoked during a level up
+    def set_max_hp(self, text):
+        msg = ''
+        for entity in self.entities:
+            if entity['name'] == text[4]:
+                entity['true_max'] = int(text[5])
+                entity['max_hp'] = entity['true_max']
+                entity['hp'] = entity['max_hp']
+                msg += '```'
+                msg += 'Maximum HP for '
+                msg += entity['name']
+                msg += ' set to '
+                msg += text[5]
+                msg += '```'
+            
+                return msg
+        
         #should only reach this point if no entity is found
         msg += '```'
         msg += 'Entity not found'
@@ -243,16 +369,23 @@ class health_goblin:
         
     def long_rest(self, text):
         temp_flag = False
+        max_flag = False
         msg = ''
         msg += '```'
         for entity in self.entities:
-            entity['hp'] = entity['max_hp']
             if entity['temp_hp'] > 0:
                 entity['temp_hp'] = 0
                 temp_flag = True
+            if entity['max_hp'] < entity['true_max']:
+                entity['max_hp'] = entity['true_max']
+                max_flag = True
+            entity['hp'] = entity['max_hp']    
+            
         msg += 'All entities healed to full health'
         if temp_flag == True:
             msg += '\nTemporary hit points removed'
+        if max_flag == True:
+            msg += '\nMaximum hit points restored'
         msg += '```'
         
         return msg
