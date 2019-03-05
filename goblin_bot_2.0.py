@@ -41,7 +41,7 @@ async def on_message(message):
     print("input text:", text)
     msg = ''
     if text[0] == '!G':
-        if text[1] == 'give' or 'take' or 'uwu':
+        if text[1] == 'give' or 'take' or 'uwu' or 'fortune':
             msg = Misc_Goblin.create_output(text)
         if text[1] == 'help':
             msg = Help_Goblin.create_output(text)
