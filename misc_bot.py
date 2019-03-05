@@ -22,6 +22,8 @@ class misc_goblin:
             msg = self.take_goblin(text)
         if text[1] == 'uwu':
             msg = self.uwu(text)
+        if text[1] == 'fortune':
+            msg = self.fortune(text)
             
         return msg
     
@@ -45,4 +47,43 @@ class misc_goblin:
     def uwu(self, text):
         msg = ''
         msg += str(random.choice(['uwu','owo','OwO']))
+        return msg
+        
+    def fortune(self, text):
+        msg = ''
+        
+        if text[2] == None:
+            msg += '```'
+            msg += 'The goblin cannot provide a fortune if not asked a question'
+            msg += '```'
+        else:
+            msg += '*'
+            for word in text[2:]:
+                msg += word + " "
+            msg = msg[:-1]
+            msg += '*\n'
+            
+            msg += random.choice([
+                "It is certain.",
+                "It is decidedly so.",
+                "Without a doubt.",
+                "Yes - definitely.",
+                "You may rely on it.",
+                "As I see it, yes.",
+                "Most likely.",
+                "Outlook good.",
+                "Yes.",
+                "Signs point to yes.",
+                "Reply hazy, try again.",
+                "Ask again later.",
+                "Better not tell you ",
+                "Cannot predict now.",
+                "Concentrate and ask again.",
+                "Don\'t count on it.",
+                "My reply is no.",
+                "My sources say no.",
+                "Outlook not so good.",
+                "Very doubtful."
+                ])
+                
         return msg
