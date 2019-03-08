@@ -5,7 +5,9 @@ class help_goblin:
     def create_output(self, text):
         msg = ""
         
-        if text[2] == "roll":
+        if len(text) == 2:
+            msg = self.help_prompt()
+        elif text[2] == "roll":
             msg = self.roll_help()
         elif text[2] == "health":
             msg = self.health_help()
@@ -13,9 +15,7 @@ class help_goblin:
             msg = self.spell_lookup_help()
         elif text[2] == "misc":
             msg = self.misc_help()
-        else:
-            msg = self.help_prompt()
-        
+
         return msg
     
     def roll_help(self):
