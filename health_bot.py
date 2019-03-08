@@ -77,6 +77,7 @@ class health_goblin:
         
         entity['name'] = name
         entity['max_hp'] = max_hp
+        entity['true_max'] = max_hp
         entity['hp'] = hp
         entity['temp_hp'] = 0
         
