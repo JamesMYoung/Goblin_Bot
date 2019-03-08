@@ -104,12 +104,14 @@ class help_goblin:
     
     def help_prompt(self):
         msg = ""
-
-        msg += "Possible help topics include:"
-        msg += "roll help: Help for roll functionality"
-        msg += "health help: Help for health functionality"
-        msg += "spell lookup help: Help for spell lookup functionality"
+        
+        msg += '```'
+        msg += "Possible help topics include:\n"
+        msg += "roll help: Help for roll functionality\n"
+        msg += "health help: Help for health functionality\n"
+        msg += "spell lookup help: Help for spell lookup functionality\n"
         msg += "misc help: Fun things :)"
+        msg += '```'
         
         return msg
     
