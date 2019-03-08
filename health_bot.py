@@ -351,7 +351,7 @@ class health_goblin:
             if entity['name'] == text[4]:
                 entity['true_max'] = int(text[5])
                 entity['max_hp'] = entity['true_max']
-                entity['hp'] = entity['max_hp']
+                #entity['hp'] = entity['max_hp']
                 msg += '```'
                 msg += 'Maximum HP for '
                 msg += entity['name']
