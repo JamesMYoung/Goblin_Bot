@@ -34,7 +34,6 @@ class health_goblin:
             self.fp.write(hold_str)
         self.fp.close()
         
-        pass
         
     def create_output(self, text):
         msg = ''
