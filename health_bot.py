@@ -4,7 +4,15 @@ class health_goblin:
     def __init__(self):
         print("Health Goblin Created")
         self.entities = []
-        self.fp = open("player_health.data", "r+")
+        try:
+            self.fp = open("player_health.data", "r+")
+        except IOError:
+            self.fp = open("player_health.data", "w")
+            self.fp.close()
+            self.fp = open("player_health.data", "r+")
+        
+        
+        #self.fp = open("player_health.data", "r+")
         for line in self.fp:
             words = line.split()
             entity = {}

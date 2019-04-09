@@ -13,6 +13,7 @@ from help_bot import help_goblin
 from spell_lookup_bot import spell_lookup_goblin
 from misc_bot import misc_goblin
 from health_bot import health_goblin
+from init_bot import init_goblin
 
 if not discord.opus.is_loaded():
     # the 'opus' library here is opus.dll on windows
@@ -51,6 +52,8 @@ async def on_message(message):
             msg = Spell_Lookup_Goblin.create_output(text)
         if text[1] == 'health':
             msg = Health_Goblin.create_output(text)
+        if text[1] == 'init':
+            msg = Init_Goblin.create_output(text)
             
         await client.send_message(message.channel, msg)
     elif text[0] == '!Gflip':
@@ -145,5 +148,7 @@ async def on_ready():
     Misc_Goblin = misc_goblin()
     global Health_Goblin
     Health_Goblin = health_goblin()
+    global Init_Goblin
+    Init_Goblin = init_goblin()
 
 client.run(TOKEN)
