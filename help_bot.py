@@ -97,6 +97,7 @@ class help_goblin:
         msg += "!G give smooch - uwu\n"
         msg += "!G give hug - get that good hug\n"
         msg += "!G take gold - evil, don't do this\n"
+        msg += "!G fortune [question] - ask the goblin a question, receive a mysterious reply\n"
         msg += "```"
         msg += "\n"
         
@@ -107,10 +108,10 @@ class help_goblin:
         
         msg += '```'
         msg += "Possible help topics include:\n"
-        msg += "roll help: Help for roll functionality\n"
-        msg += "health help: Help for health functionality\n"
-        msg += "spell lookup help: Help for spell lookup functionality\n"
-        msg += "misc help: Fun things :)"
+        msg += "help roll: Help for roll functionality\n"
+        msg += "help health: Help for health functionality\n"
+        msg += "help spell lookup: Help for spell lookup functionality\n"
+        msg += "help misc: Fun things :)"
         msg += '```'
         
         return msg

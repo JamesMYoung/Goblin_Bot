@@ -24,6 +24,8 @@ class misc_goblin:
             msg = self.uwu(text)
         if text[1] == 'fortune':
             msg = self.fortune(text)
+        if text[1] == 'starwars':
+            msg = self.starwars(text)
             
         return msg
     
@@ -86,4 +88,24 @@ class misc_goblin:
                 "Very doubtful."
                 ])
                 
+        return msg
+        
+    def starwars(self, text):
+        msg = ''
+        msg = '```'
+        file = open("starwars.data", "r+")
+        
+        quotes = []
+        
+        for line in file:
+            if line[0] == '#':
+                pass
+            elif line[0] == '-':
+                quotes.append(line[1:])
+                
+        output = random.choice(quotes)
+        msg += output
+        msg += '```'
+        
+        file.close()
         return msg
