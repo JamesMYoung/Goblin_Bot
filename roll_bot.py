@@ -15,7 +15,9 @@ class roll_goblin:
         msg = ""
         
         if text[2] == 'adv':
-            msg = self.roll_adv(text)        
+            msg = self.roll_adv(text)
+        elif text[2] == 'dis':
+            msg = self.roll_dis(text)
         elif text[2] == 'stats':
             msg = self.roll_stats(text)
         elif text[2] != 'stats':
@@ -111,20 +113,23 @@ class roll_goblin:
             roll_1 = random.randrange(1, 21)
             roll_2 = random.randrange(1, 21)
             msg += 'roll 1: ' + str(roll_1) + '\n'
-            msg += 'roll_2: ' + str(roll_2) + '\n'
-            msg += 'bonus: '
+            msg += 'roll 2: ' + str(roll_2) + '\n'
+            
             
             if text[3][0] == '-':
                 temp = text[3][1:]
                 bonus -= int(temp)
+                msg += 'anti-bonus: '
                 msg += text[3]
             elif text[3][0] == '+':
                 temp = text[3][1:]
                 bonus += int(temp)
+                msg += 'bonus: '
                 msg += text[3]
             elif text[3].isdigit():
                 #assumes the bonus is positive
                 bonus += int(text[3])
+                msg += 'bonus: '
                 msg += '+'
                 msg += text[3]
             
@@ -143,9 +148,71 @@ class roll_goblin:
             roll_1 = random.randrange(1, 21)
             roll_2 = random.randrange(1, 21)
             msg += 'roll 1: ' + str(roll_1) + '\n'
-            msg += 'roll_2: ' + str(roll_2) + '\n'
+            msg += 'roll 2: ' + str(roll_2) + '\n'
             
             if roll_1 > roll_2:
+                msg += 'Result - ' + str(roll_1)
+            else:
+                msg += 'Result - ' + str(roll_2)
+            
+        
+        msg += '```' 
+        return msg
+        
+    def roll_dis(self, text):
+        msg = ''
+        msg += '```'
+        
+        roll_1 = 0
+        roll_2 = 0
+        
+        bonus = 0
+        
+        print(len(text))
+        #!G roll adv +3
+        #bonus/antibonus
+        if len(text) == 4:
+            roll_1 = random.randrange(1, 21)
+            roll_2 = random.randrange(1, 21)
+            msg += 'roll 1: ' + str(roll_1) + '\n'
+            msg += 'roll 2: ' + str(roll_2) + '\n'
+            
+            
+            if text[3][0] == '-':
+                temp = text[3][1:]
+                bonus -= int(temp)
+                msg += 'anti-bonus: '
+                msg += text[3]
+            elif text[3][0] == '+':
+                temp = text[3][1:]
+                bonus += int(temp)
+                msg += 'bonus: '
+                msg += text[3]
+            elif text[3].isdigit():
+                #assumes the bonus is positive
+                bonus += int(text[3])
+                msg += 'bonus: '
+                msg += '+'
+                msg += text[3]
+            
+            msg += '\n'
+            
+            if roll_1 < roll_2:
+                msg += 'Result - ' + str(roll_1 + bonus)
+            else:
+                msg += 'Result - ' + str(roll_2 + bonus)
+            
+            
+            
+            
+        #no bonus
+        elif len(text) < 4:
+            roll_1 = random.randrange(1, 21)
+            roll_2 = random.randrange(1, 21)
+            msg += 'roll 1: ' + str(roll_1) + '\n'
+            msg += 'roll 2: ' + str(roll_2) + '\n'
+            
+            if roll_1 < roll_2:
                 msg += 'Result - ' + str(roll_1)
             else:
                 msg += 'Result - ' + str(roll_2)
