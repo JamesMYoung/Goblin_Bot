@@ -13,10 +13,14 @@ class roll_goblin:
         #[num]d[num]
         print("Begin creating output...")
         msg = ""
-        if text[2] != 'stats':
-            msg = self.roll_dice(text)
-        if text[2] == 'stats':
+        
+        if text[2] == 'adv':
+            msg = self.roll_adv(text)        
+        elif text[2] == 'stats':
             msg = self.roll_stats(text)
+        elif text[2] != 'stats':
+            msg = self.roll_dice(text)
+        
         
         return msg
     
@@ -89,4 +93,63 @@ class roll_goblin:
         
         msg += '```'
         
+        return msg
+        
+    def roll_adv(self, text):
+        msg = ''
+        msg += '```'
+        
+        roll_1 = 0
+        roll_2 = 0
+        
+        bonus = 0
+        
+        print(len(text))
+        #!G roll adv +3
+        #bonus/antibonus
+        if len(text) == 4:
+            roll_1 = random.randrange(1, 21)
+            roll_2 = random.randrange(1, 21)
+            msg += 'roll 1: ' + str(roll_1) + '\n'
+            msg += 'roll_2: ' + str(roll_2) + '\n'
+            msg += 'bonus: '
+            
+            if text[3][0] == '-':
+                temp = text[3][1:]
+                bonus -= int(temp)
+                msg += text[3]
+            elif text[3][0] == '+':
+                temp = text[3][1:]
+                bonus += int(temp)
+                msg += text[3]
+            elif text[3].isdigit():
+                #assumes the bonus is positive
+                bonus += int(text[3])
+                msg += '+'
+                msg += text[3]
+            
+            msg += '\n'
+            
+            if roll_1 > roll_2:
+                msg += 'Result - ' + str(roll_1 + bonus)
+            else:
+                msg += 'Result - ' + str(roll_2 + bonus)
+            
+            
+            
+            
+        #no bonus
+        elif len(text) < 4:
+            roll_1 = random.randrange(1, 21)
+            roll_2 = random.randrange(1, 21)
+            msg += 'roll 1: ' + str(roll_1) + '\n'
+            msg += 'roll_2: ' + str(roll_2) + '\n'
+            
+            if roll_1 > roll_2:
+                msg += 'Result - ' + str(roll_1)
+            else:
+                msg += 'Result - ' + str(roll_2)
+            
+        
+        msg += '```' 
         return msg
