@@ -42,7 +42,7 @@ async def on_message(message):
     print("input text:", text)
     msg = ''
     if text[0] == '!G':
-        if text[1] == 'give' or 'take' or 'uwu' or 'fortune':
+        if text[1] == 'give' or 'take' or 'uwu' or 'fortune' or 'starwars':
             msg = Misc_Goblin.create_output(text)
         if text[1] == 'help':
             msg = Help_Goblin.create_output(text)
@@ -54,6 +54,11 @@ async def on_message(message):
             msg = Health_Goblin.create_output(text)
         if text[1] == 'init':
             msg = Init_Goblin.create_output(text)
+            
+        if 'vore' in text:
+            msg = random.choice([
+                "I swear to fucking christ\n"
+                ])
             
         await client.send_message(message.channel, msg)
     elif text[0] == '!Gflip':

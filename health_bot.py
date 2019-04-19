@@ -215,7 +215,7 @@ class health_goblin:
                     
                 if entity['hp'] > entity['max_hp']:
                     entity['hp'] = entity['max_hp']
-                if entity['hp'] < 0:
+                if entity['hp'] <= 0:
                     entity['hp'] = 0
                     death_flag = True
 
