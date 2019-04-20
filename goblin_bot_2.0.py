@@ -15,6 +15,7 @@ from misc_bot import misc_goblin
 from health_bot import health_goblin
 from init_bot import init_goblin
 
+
 if not discord.opus.is_loaded():
     # the 'opus' library here is opus.dll on windows
     # or libopus.so on linux in the current directory
@@ -55,9 +56,16 @@ async def on_message(message):
         if text[1] == 'init':
             msg = Init_Goblin.create_output(text)
             
+        #if text[1] == 'parse':
+        #    input_str = ''.join(text[2:])
+        #    msg = goblin_handle(input_str)
+            
         if 'vore' in text:
             msg = random.choice([
-                "I swear to fucking christ\n"
+                "I swear to fucking christ\n",
+                "Someone's about to get banned\n",
+                "Everyone go home, D&D is cancelled\n",
+                "Why did you type that\n"
                 ])
             
         await client.send_message(message.channel, msg)
