@@ -102,7 +102,8 @@ class misc_goblin:
                 pass
             elif line[0] == '-':
                 quotes.append(line[1:])
-                
+        
+        print(quotes)
         output = random.choice(quotes)
         msg += output
         msg += '```'
