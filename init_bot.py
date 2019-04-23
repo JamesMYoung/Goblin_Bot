@@ -40,6 +40,8 @@ class init_goblin:
             msg = self.roll_init(text)
         if text[2] == 'add':
             msg = self.add_init(text)
+        if text[2] == 'delete':
+            msg = self.del_init(text)
         if text[2] == 'list':
             msg = self.list_init(text)
         if text[2] == 'clear':
@@ -111,6 +113,19 @@ class init_goblin:
         msg += text[4]
         msg += '```'
         
+        return msg
+        
+    def del_init(self, text):
+        for entity in self.entities:
+            if entity['name'] == text[3]:
+                self.entities.remove(entity)
+        
+        msg = ''
+        msg += '```'
+        msg += 'deleted '
+        msg += text[3]
+        msg += ' from list'
+        msg += '```'
         return msg
         
     def list_init(self, text):

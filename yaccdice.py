@@ -24,6 +24,24 @@ def p_term_sub(p):
     msg += str(p[1]) + ' - ' + str(p[3]) + '\n'
     msg += ' total: ' + str(p[1] - p[3]) + '\n'
     p[0] = p[1] - p[3]
+    
+def p_term_mul(p):
+    'term : term TIMES term'
+    global msg
+    
+    msg += 'sum: '
+    msg += str(p[1]) + ' * ' + str(p[3]) + '\n'
+    msg += ' total: ' + str(p[1] * p[3]) + '\n'
+    p[0] = p[1] * p[3]
+    
+def p_term_div(p):
+    'term : term DIVIDE term'
+    global msg
+    
+    msg += 'sum: '
+    msg += str(p[1]) + ' / ' + str(p[3]) + '\n'
+    msg += ' total: ' + str(p[1] / p[3]) + '\n'
+    p[0] = p[1] / p[3]
 
 #one roll should result in a single value (?)
 def p_roll(p):

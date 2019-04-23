@@ -17,8 +17,8 @@ tokens = (
     'NUMBER',
     'PLUS',
     'MINUS',
-    #'TIMES',
-    #'DIVIDE',
+    'TIMES',
+    'DIVIDE',
     #'LPAREN',
     #'RPAREN',
     'D',
@@ -27,8 +27,8 @@ tokens = (
 # Regular expression rules for simple tokens
 t_PLUS    = r'\+'
 t_MINUS   = r'\-'
-#t_TIMES   = r'\*'
-#t_DIVIDE  = r'/'
+t_TIMES   = r'\*'
+t_DIVIDE  = r'/'
 #t_LPAREN  = r'\('
 #t_RPAREN  = r'\)'
 t_D = r'[dD]'
