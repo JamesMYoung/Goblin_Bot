@@ -11,6 +11,8 @@ class help_goblin:
             msg = self.roll_help()
         elif text[2] == "health":
             msg = self.health_help()
+        elif text[2] == "init":
+            msg = self.init_help()
         elif text[2] == "spell" and text[3] == "lookup":
             msg = self.spell_lookup_help()
         elif text[2] == "misc":
@@ -25,7 +27,7 @@ class help_goblin:
         msg += "```"
         msg += "Rolling can be done in two ways:\n"
         msg += "!G[number]\n"
-        msg += "   -rolls any of the standard D&D dice [2, 4, 6, 8, 10, 20, 100]\n"
+        msg += "   -rolls any of the standard D&D dice [4, 6, 8, 10, 20, 100]\n"
         #msg += "ex: !G20 will roll a 1d20.\n"
         msg += "!Gflip\n"
         msg += "   -flips a coin, and will give either a heads or a tails.\n"
@@ -72,7 +74,25 @@ class help_goblin:
         msg += "\n"
         
         return msg
-    
+        
+    def init_help(self):
+        msg = ""
+        
+        msg += "__**Initiative**__\n"
+        msg += '```'
+        msg += '!G init roll [Name] (Bonus)\n'
+        msg += '   - Rolls a d20, adds the bonus (if provided), and then creates a new entry in the initiative table with the provided name.\n'
+        msg += '!G init add [Name] [Initiative]\n'
+        msg += '   - Adds an entry to the table with the provided name and initiative value.\n'
+        msg += '!G init delete [Name]\n'
+        msg += '   - Deletes the entry that matches the provided name.\n'
+        msg += '!G init list\n'
+        msg += '   - Lists the current initiative table, in sorted order.\n'
+        msg += '!G init clear\n'
+        msg += '   - Clears the current initiative table.\n'
+        msg += '```'
+        return msg
+        
     def spell_lookup_help(self):
         msg = ""
         
@@ -98,6 +118,7 @@ class help_goblin:
         msg += "!G give hug - get that good hug\n"
         msg += "!G take gold - evil, don't do this\n"
         msg += "!G fortune [question] - ask the goblin a question, receive a mysterious reply\n"
+        msg += "!G starwars - Spinning, it's a good trick.\n"
         msg += "```"
         msg += "\n"
         
@@ -110,6 +131,7 @@ class help_goblin:
         msg += "Possible help topics include:\n"
         msg += "help roll: Help for roll functionality\n"
         msg += "help health: Help for health functionality\n"
+        msg += "help init: Help for initiative functionality\n"
         msg += "help spell lookup: Help for spell lookup functionality\n"
         msg += "help misc: Fun things :)"
         msg += '```'
