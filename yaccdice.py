@@ -7,47 +7,108 @@ from lexdice import tokens
 msg = ''
 error_flag = False
 
-def p_term_add(p):
-    'term : term PLUS term'
+precedence = (
+    ('left', 'PLUS', 'MINUS'),
+    ('left', 'TIMES', 'DIVIDE'),
+)
+
+def p_term_list_mod(p):
+    '''term_list : LPAREN term_list RPAREN PLUS NUMBER
+                 | LPAREN term_list RPAREN MINUS NUMBER
+                 | LPAREN term_list RPAREN'''
+    global msg
+    
+    temp_list = []
+    
+    
+    
+    if len(p) == 6:
+        msg += 'with mod: '
+        for i in p[2]:
+            if p[4] == '+':
+                temp_list.append(i + p[5])
+            if p[4] == '-':
+                temp_list.append(i - p[5])
+        
+        for i in temp_list:
+            msg += str(i) + ', '
+        msg = msg[:-2]
+        msg += '\n'
+        
+        p[0] = temp_list
+    elif len(p) == 4:
+        p[0] = p[2]
+    
+    
+
+def p_term_list(p):
+    '''term_list : term COMMA term'''
+    global msg
+    #msg = '```' # clear message
+    
+    temp_list = []
+    temp_list.append(p[1])
+    temp_list.append(p[3])
+    
+    print("temp list begin")
+    print(temp_list)
+    
+    msg += 'results: ' + str(p[1]) + ', ' + str(p[3]) + '\n'
+    
+    p[0] = temp_list
+    
+def p_term_list_cont(p):
+    '''term_list : term_list COMMA term'''
+    global msg
+    #msg = '```' # clear message
+    
+    temp_list = p[1]
+    
+    temp_list.append(p[3])
+    
+    print("temp list continue")
+    print(temp_list)
+    
+    msg += 'results: ' 
+    for i in temp_list:
+        msg += str(i) + ', '
+    msg = msg[:-2]
+    msg += '\n'
+    
+    p[0] = temp_list
+    
+
+
+def p_term_math(p):
+    '''term : term PLUS term
+            | term MINUS term
+            | term TIMES term
+            | term DIVIDE term'''
     global msg
     
     msg += 'sum: '
-    msg += str(p[1]) + ' + ' + str(p[3]) + '\n'
-    msg += ' total: ' + str(p[1] + p[3]) + '\n'
-    p[0] = p[1] + p[3]
-    
-def p_term_sub(p):
-    'term : term MINUS term'
-    global msg
-    
-    msg += 'sum: '
-    msg += str(p[1]) + ' - ' + str(p[3]) + '\n'
-    msg += ' total: ' + str(p[1] - p[3]) + '\n'
-    p[0] = p[1] - p[3]
-    
-def p_term_mul(p):
-    'term : term TIMES term'
-    global msg
-    
-    msg += 'sum: '
-    msg += str(p[1]) + ' * ' + str(p[3]) + '\n'
-    msg += ' total: ' + str(p[1] * p[3]) + '\n'
-    p[0] = p[1] * p[3]
-    
-def p_term_div(p):
-    'term : term DIVIDE term'
-    global msg
-    
-    msg += 'sum: '
-    msg += str(p[1]) + ' / ' + str(p[3]) + '\n'
-    msg += ' total: ' + str(p[1] / p[3]) + '\n'
-    p[0] = p[1] / p[3]
+    if p[2] == '+':
+        msg += str(p[1]) + ' + ' + str(p[3]) + '\n'
+        msg += ' total: ' + str(p[1] + p[3]) + '\n'
+        p[0] = p[1] + p[3]
+    elif p[2] == '-':
+        msg += str(p[1]) + ' - ' + str(p[3]) + '\n'
+        msg += ' total: ' + str(p[1] - p[3]) + '\n'
+        p[0] = p[1] - p[3]
+    elif p[2] == '*':
+        msg += str(p[1]) + ' * ' + str(p[3]) + '\n'
+        msg += ' total: ' + str(p[1] * p[3]) + '\n'
+        p[0] = p[1] + p[3]
+    elif p[2] == '/':
+        msg += str(p[1]) + ' / ' + str(p[3]) + '\n'
+        msg += ' total: ' + str(p[1] / p[3]) + '\n'
+        p[0] = p[1] / p[3]
 
 #one roll should result in a single value (?)
 def p_roll(p):
     'roll : NUMBER D NUMBER'
-    
     global msg
+    
     #print("dice-roll: ", end='')
     msg += "dice-roll: "
     #print(str(p[1]) + "d" + str(p[3]))
@@ -88,7 +149,7 @@ def p_roll(p):
     
     #p[0] = p[1] + p[3]
     p[0] = roll_sum
-    
+
 #this converts roll tokens into number tokens
 #I have no idea if this should or should not be done
 #but it feels future-proofy, so that's good
@@ -107,7 +168,9 @@ def p_num_conv(p):
 
 def p_error(p):
     global error_flag
-    error_flag = True
+    # Error checking will be disabled until a better method of checking 
+    # for invalid input is implemented
+    #error_flag = True
     print("Syntax error in input!")
  
 # Build the parser
