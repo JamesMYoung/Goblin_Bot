@@ -19,8 +19,9 @@ tokens = (
     'MINUS',
     'TIMES',
     'DIVIDE',
-    #'LPAREN',
-    #'RPAREN',
+    'LPAREN',
+    'RPAREN',
+    'COMMA',
     'D',
 )
 
@@ -29,8 +30,9 @@ t_PLUS    = r'\+'
 t_MINUS   = r'\-'
 t_TIMES   = r'\*'
 t_DIVIDE  = r'/'
-#t_LPAREN  = r'\('
-#t_RPAREN  = r'\)'
+t_LPAREN  = r'\('
+t_RPAREN  = r'\)'
+t_COMMA   = r','
 t_D = r'[dD]'
 
 
