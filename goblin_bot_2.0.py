@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.5
+#!/usr/bin/env python3.6
 # https://github.com/Rapptz/discord.py/blob/async/examples/reply.py
 import discord
 import subprocess
@@ -16,13 +16,13 @@ from health_bot import health_goblin
 from init_bot import init_goblin
 
 
-if not discord.opus.is_loaded():
-    # the 'opus' library here is opus.dll on windows
-    # or libopus.so on linux in the current directory
-    # you should replace this with the location the
-    # opus library is located in and with the proper filename.
-    # note that on windows this DLL is automatically provided for you
-    discord.opus.load_opus('opus')
+#if not discord.opus.is_loaded():
+#    # the 'opus' library here is opus.dll on windows
+#    # or libopus.so on linux in the current directory
+#    # you should replace this with the location the
+#    # opus library is located in and with the proper filename.
+#    # note that on windows this DLL is automatically provided for you
+#    discord.opus.load_opus('opus')
 
 
 TOKEN = 'NTA2MzI2NzAyNDk0ODQyODgw.DrgqiA.DCiQQX5Ak5RZ_rOlB4teK8U-HKU'
@@ -31,7 +31,7 @@ client = discord.Client()
 
 @client.event
 async def on_message(message):
-
+    channel = message.channel
     text = message.content.split()
     # we do not want the bot to reply to itself
     audio_lock = False
@@ -40,9 +40,14 @@ async def on_message(message):
     print("message author:" + message.author.name)
     
         
-    print("input text:", text)
+    print("input text: ", text)
+    print("input length", len(text))
     msg = ''
-    if text[0] == '!G':
+    
+    if len(text) == 0:
+        print('empty message / media')
+    
+    elif text[0] == '!G':
         if text[1] == 'give' or 'take' or 'uwu' or 'fortune' or 'starwars':
             msg = Misc_Goblin.create_output(text)
         if text[1] == 'help':
@@ -68,7 +73,8 @@ async def on_message(message):
                 "Why did you type that\n"
                 ])
             
-        await client.send_message(message.channel, msg)
+        #await client.send_message(message.channel, msg)
+        await channel.send(msg)
     elif text[0] == '!Gflip':
         msg = '```The impartial goblin flips a coin and gets '
         if(random.randrange(0, 1) == 0):
@@ -76,59 +82,59 @@ async def on_message(message):
         else:
             msg += "<tails>"
         msg += ' as the result.```'
-        await client.send_message(message.channel, msg)
+        await channel.send(msg)
     elif text[0] == '!G4':
         msg = message.author.name + " rolled a: "
         rand_num = str(random.randrange(1, 5))
         msg += rand_num
         if rand_num == '4':
             msg = '**' + str(msg) + '**' 
-        await client.send_message(message.channel, msg)
+        await channel.send(msg)
     elif text[0] == '!G6':
         msg = message.author.name + " rolled a: "
         rand_num = str(random.randrange(1, 7))
         msg += rand_num
         if rand_num == '6':
             msg = '**' + str(msg) + '**' 
-        await client.send_message(message.channel, msg)
+        await channel.send(msg)
     elif text[0] == '!G8':
         msg = message.author.name + " rolled a: "
         rand_num = str(random.randrange(1, 9))
         msg += rand_num
         if rand_num == '8':
             msg = '**' + str(msg) + '**' 
-        await client.send_message(message.channel, msg)
+        await channel.send(msg)
     elif text[0] == '!G10':
         msg = message.author.name + " rolled a: "
         rand_num = str(random.randrange(1, 11))
         msg += rand_num
         if rand_num == '10':
             msg = '**' + str(msg) + '**' 
-        await client.send_message(message.channel, msg)
+        await channel.send(msg)
     elif text[0] == '!G12':
         msg = message.author.name + " rolled a: "
         rand_num = str(random.randrange(1, 13))
         msg += rand_num
         if rand_num == '12':
             msg = '**' + str(msg) + '**' 
-        await client.send_message(message.channel, msg)
+        await channel.send(msg)
     elif text[0] == '!G20':
         msg = message.author.name + " rolled a: "
         rand_num = str(random.randrange(1, 21))
         msg += rand_num
         if rand_num == '20':
             msg = '**' + str(msg) + '**' 
-        await client.send_message(message.channel, msg)
+        await channel.send(msg)
     elif text[0] == '!G100':
         msg = message.author.name + " rolled a: "
         rand_num = str(random.randrange(1, 101))
         msg += rand_num
         if rand_num == '100':
             msg = '**' + str(msg) + '**' 
-        await client.send_message(message.channel, msg)
+        await channel.send(msg)
     elif text[0] == 'sleep' and text[1] == 'tite' and text[2] == 'goblin' and message.author.name == "Xelasari":
         msg = "All in a day's work"
-        await client.send_message(message.channel, msg)
+        await channel.send(msg)
         await client.logout()
         
     else:
@@ -149,8 +155,8 @@ async def on_ready():
     print(client.user.name)
     print(client.user.id)
     print('------')
-    game = discord.Game(name="Searching for Gold")
-    await client.change_presence(game=game)
+    game = discord.Game("Searching for Gold")
+    await client.change_presence(activity=game)
     global Roll_Goblin 
     Roll_Goblin = roll_goblin()
     global Help_Goblin 
