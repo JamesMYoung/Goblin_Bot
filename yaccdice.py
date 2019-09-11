@@ -20,8 +20,6 @@ def p_term_list_mod(p):
     
     temp_list = []
     
-    
-    
     if len(p) == 6:
         msg += 'with mod: '
         for i in p[2]:
@@ -53,7 +51,7 @@ def p_term_list(p):
     print("temp list begin")
     print(temp_list)
     
-    msg += 'results: ' + str(p[1]) + ', ' + str(p[3]) + '\n'
+    msg += 'dice list: ' + str(p[1]) + ', ' + str(p[3]) + '\n'
     
     p[0] = temp_list
     
@@ -69,7 +67,7 @@ def p_term_list_cont(p):
     print("temp list continue")
     print(temp_list)
     
-    msg += 'results: ' 
+    msg += 'dice list: ' 
     for i in temp_list:
         msg += str(i) + ', '
     msg = msg[:-2]
@@ -159,8 +157,12 @@ def p_roll_conv(p):
 
 #converts num to term, to be used in calculations
 def p_num_conv(p):
-    'term : NUMBER'
-    p[0] = p[1]
+    '''term : NUMBER
+            | MINUS NUMBER'''
+    if len(p) == 2:
+        p[0] = p[1]
+    elif len(p) == 3:
+        p[0] = -1 * p[2]
 
 #seemingly, there needs to be a handle for a single term
 
@@ -202,4 +204,6 @@ def goblin_handle(roll_str):
     
     if error_flag == True:
         msg = '```Error in setting up dice roll.```'
+    if msg == '``````':
+        msg = "```... Something's wrong```"
     return msg
