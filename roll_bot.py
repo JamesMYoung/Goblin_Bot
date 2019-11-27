@@ -25,7 +25,9 @@ class roll_goblin:
         elif text[2] != 'stats':
             msg = self.roll_dice(text)
         
-        
+        if msg == "``````":
+            msg = ":thinking:"
+		
         return msg
     
     
@@ -50,7 +52,7 @@ class roll_goblin:
         msg = ''
         input_str = ''.join(text[2:])
         msg = goblin_handle(input_str)
-        
+		
         return msg
     
     # THIS IS NOW DEPRECIATED DUE TO THE LEX/YACC IMPLEMENTATION
