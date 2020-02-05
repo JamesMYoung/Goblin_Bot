@@ -16,11 +16,11 @@ class roll_goblin:
         print("Begin creating output...")
         msg = ""
         
-        if text[2] == 'adv':
-            msg = self.roll_adv(text)
-        elif text[2] == 'dis':
-            msg = self.roll_dis(text)
-        elif text[2] == 'stats':
+        #if text[2] == 'adv':
+        #    msg = self.roll_adv(text)
+        #if text[2] == 'dis':
+        #    msg = self.roll_dis(text)
+        if text[2] == 'stats':
             msg = self.roll_stats(text)
         elif text[2] != 'stats':
             msg = self.roll_dice(text)

@@ -178,6 +178,43 @@ def p_roll(p):
     #p[0] = p[1] + p[3]
     p[0] = roll_sum
 
+def p_roll_adv(p):
+	'roll : ADV'
+	global msg
+
+	roll_1 = random.randrange(1, 21)
+	roll_2 = random.randrange(1, 21)
+	
+	msg += "dice-roll: Advantage\n"
+	msg += " roll 1: " + str(roll_1) + "\n"
+	msg += " roll 2: " + str(roll_2) + "\n"
+	
+	if roll_1 >= roll_2:
+		msg += " Result - " + str(roll_1) + "\n"
+		p[0] = roll_1
+	else:
+		msg += " Result - " + str(roll_2) + "\n"
+		p[0] = roll_2
+	
+def p_roll_dis(p):
+	'roll : DIS'
+	global msg
+	
+	roll_1 = random.randrange(1, 21)
+	roll_2 = random.randrange(1, 21)
+	
+	msg += "dice-roll: Disadvantage\n"
+	msg += " roll 1: " + str(roll_1) + "\n"
+	msg += " roll 2: " + str(roll_2) + "\n"
+	
+	if roll_1 <= roll_2:
+		msg += " Result - " + str(roll_1) + "\n"
+		p[0] = roll_1
+	else:
+		msg += " Result - " + str(roll_2) + "\n"
+		p[0] = roll_2
+	
+	
 #this converts roll tokens into number tokens
 #I have no idea if this should or should not be done
 #but it feels future-proofy, so that's good
