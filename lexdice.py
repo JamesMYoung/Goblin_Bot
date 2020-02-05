@@ -23,6 +23,8 @@ tokens = (
     'RPAREN',
     'COMMA',
     'D',
+	'ADV',
+	'DIS'
 )
 
 # Regular expression rules for simple tokens
@@ -34,6 +36,8 @@ t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
 t_COMMA   = r','
 t_D = r'[dD]'
+t_ADV = r'[aA][dD][vV]'
+t_DIS = r'[dD][iI][sS]'
 
 
 
