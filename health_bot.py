@@ -162,7 +162,12 @@ class health_goblin:
         if msg == '``````':
             msg = ''
             
-        if isinstance(result, float):
+        if isinstance(result, list):
+            msg += '```'
+            msg += 'Error: result in the form of a list - operation requires single value'
+            msg += '```'
+            return msg
+        elif isinstance(result, float):
             msg += '```'
             msg += 'rounding value ' + str(result) + ' to ' + str(int(result))
             msg += '```'
@@ -207,7 +212,12 @@ class health_goblin:
         if msg == '``````':
             msg = ''
             
-        if isinstance(result, float):
+        if isinstance(result, list):
+            msg += '```'
+            msg += 'Error: result in the form of a list - operation requires single value'
+            msg += '```'
+            return msg
+        elif isinstance(result, float):
             msg += '```'
             msg += 'rounding value ' + str(result) + ' to ' + str(int(result))
             msg += '```'
@@ -361,7 +371,12 @@ class health_goblin:
         if msg == '``````':
             msg = ''
             
-        if isinstance(result, float):
+        if isinstance(result, list):
+            msg += '```'
+            msg += 'Error: result in the form of a list - operation requires single value'
+            msg += '```'
+            return msg
+        elif isinstance(result, float):
             msg += '```'
             msg += 'rounding value ' + str(result) + ' to ' + str(int(result))
             msg += '```'

@@ -30,7 +30,7 @@ def p_term_list_mod(p):
 		for i in p:
 			print(i, end=' ')
 		print("")
-		msg += 'with mod: '
+		msg += 'with mod [' + str(p[4]) + str(p[5]) + ']: '
 		print("type of p[2]:", type(p[2]))
 		# very cheesy way of checking int type
 		if type(p[2]) == type(1):
