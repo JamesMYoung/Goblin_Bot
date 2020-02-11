@@ -265,6 +265,7 @@ def goblin_handle(roll_str):
     result = parser.parse(roll_str)
     msg += '```'
     
+	
     if error_flag == True:
         msg = '```Error in setting up dice roll.```'
-    return msg
+    return msg, result

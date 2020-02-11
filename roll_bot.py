@@ -51,7 +51,7 @@ class roll_goblin:
     def roll_dice(self, text):
         msg = ''
         input_str = ''.join(text[2:])
-        msg = goblin_handle(input_str)
+        msg, result = goblin_handle(input_str)
 		
         return msg
     

@@ -1,5 +1,7 @@
 import random
 
+from yaccdice import goblin_handle
+
 class health_goblin:
     def __init__(self):
         print("Health Goblin Created")
@@ -152,10 +154,17 @@ class health_goblin:
 
     def heal_entity(self, text):
         #!G health heal dazzak 5
-        msg = ''
+        
+        input_str = ''.join(text[4:])
+        msg, result = goblin_handle(input_str)
+        print(msg)
+        # Clears the 'empty string' case from the dice roller
+        if msg == '``````':
+            msg = ''
         for entity in self.entities:
             if entity['name'] == text[3]:
-                entity['hp'] += int(text[4])
+                #entity['hp'] += int(text[4])
+                entity['hp'] += result
                 if entity['hp'] > entity['max_hp']:
                     entity['hp'] = entity['max_hp']
                 if entity['hp'] < 0:
@@ -163,7 +172,7 @@ class health_goblin:
                 msg += '```'
                 msg += entity['name']
                 msg += ' healed for '
-                msg += text[4]
+                msg += str(result)
                 msg += ' health ('
                 msg += str(entity['hp'])
                 msg += '/'
@@ -186,7 +195,10 @@ class health_goblin:
         return msg
 
     def hurt_entity(self, text):
-        msg = ''
+        input_str = ''.join(text[4:])
+        msg, result = goblin_handle(input_str)
+        if msg == '``````':
+            msg = ''
         death_flag = False
         for entity in self.entities:
             if entity['name'] == text[3]:
@@ -196,8 +208,8 @@ class health_goblin:
                     #if damage is greater than temp_hp
                     #subtract temp hp from damage, remove remaining damage
                     #from player hp
-                    if int(text[4]) > entity['temp_hp']:
-                        remaining_damage = int(text[4]) - entity['temp_hp'] 
+                    if int(result) > entity['temp_hp']:
+                        remaining_damage = result - entity['temp_hp'] 
                         entity['temp_hp'] = 0
                         entity['hp'] -= remaining_damage
                     #if damage == temp_hp
@@ -207,11 +219,11 @@ class health_goblin:
                     #if damage < temp_hp
                     #subtract only from temp_hp
                     else:
-                        entity['temp_hp'] -= int(text[4])
+                        entity['temp_hp'] -= result
                         
                     
                 else:
-                    entity['hp'] -= int(text[4])
+                    entity['hp'] -= result
                     
                 if entity['hp'] > entity['max_hp']:
                     entity['hp'] = entity['max_hp']
@@ -222,7 +234,7 @@ class health_goblin:
                 msg += '```'
                 msg += entity['name']
                 msg += ' took '
-                msg += text[4]
+                msg += str(result)
                 msg += ' damage ('
                 msg += str(entity['hp'])
                 msg += '/'
