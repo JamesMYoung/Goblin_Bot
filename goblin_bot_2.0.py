@@ -33,8 +33,8 @@ client = discord.Client()
 async def on_message(message):
     channel = message.channel
     text = message.content.split()
-    # we do not want the bot to reply to itself
     audio_lock = False
+    # we do not want the bot to reply to itself
     if message.author == client.user:
         return
     print("message author:" + message.author.name)
