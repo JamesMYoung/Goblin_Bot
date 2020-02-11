@@ -161,6 +161,13 @@ class health_goblin:
         # Clears the 'empty string' case from the dice roller
         if msg == '``````':
             msg = ''
+            
+        if isinstance(result, float):
+            msg += '```'
+            msg += 'rounding value ' + str(result) + ' to ' + str(int(result))
+            msg += '```'
+            result = int(result)
+            
         for entity in self.entities:
             if entity['name'] == text[3]:
                 #entity['hp'] += int(text[4])
@@ -199,6 +206,13 @@ class health_goblin:
         msg, result = goblin_handle(input_str)
         if msg == '``````':
             msg = ''
+            
+        if isinstance(result, float):
+            msg += '```'
+            msg += 'rounding value ' + str(result) + ' to ' + str(int(result))
+            msg += '```'
+            result = int(result)
+            
         death_flag = False
         for entity in self.entities:
             if entity['name'] == text[3]:
@@ -346,6 +360,12 @@ class health_goblin:
         msg, result = goblin_handle(input_str)
         if msg == '``````':
             msg = ''
+            
+        if isinstance(result, float):
+            msg += '```'
+            msg += 'rounding value ' + str(result) + ' to ' + str(int(result))
+            msg += '```'
+            result = int(result)
         
         for entity in self.entities:
             
