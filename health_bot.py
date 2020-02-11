@@ -342,16 +342,20 @@ class health_goblin:
         
     #this function for adding temp HP
     def temp_health(self, text):
-        msg = ''
+        input_str = ''.join(text[4:])
+        msg, result = goblin_handle(input_str)
+        if msg == '``````':
+            msg = ''
+        
         for entity in self.entities:
             
             if entity['name'] == text[3]:
-                entity['temp_hp'] = int(text[4])
+                entity['temp_hp'] = result
                 msg += '```'
                 msg += 'Temporary HP for '
                 msg += entity['name']
                 msg += ' set to '
-                msg += text[4]
+                msg += str(result)
                 msg += '```'
             
                 return msg
