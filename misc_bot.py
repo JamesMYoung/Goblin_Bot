@@ -4,12 +4,12 @@ class misc_goblin:
     def __init__(self):
 
         try:
-            self.fp = open("gold.data", "r+")
+            self.fp = open("data/gold.data", "r+")
             self.gold_counter = int(self.fp.read())
         except IOError:
-            self.fp = open("gold.data", "w")
+            self.fp = open("data/gold.data", "w")
             self.fp.close()
-            self.fp = open("gold.data", "r+")
+            self.fp = open("data/gold.data", "r+")
             self.gold_counter = 0
             
         print('Misc Goblin Created')

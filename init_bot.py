@@ -5,11 +5,11 @@ class init_goblin:
         print("init_goblin created")
         self.entities = []
         try:
-            self.fp = open("player_init.data", "r+")
+            self.fp = open("data/player_init.data", "r+")
         except IOError:
-            self.fp = open("player_init.data", "w")
+            self.fp = open("data/player_init.data", "w")
             self.fp.close()
-            self.fp = open("player_init.data", "r+")
+            self.fp = open("data/player_init.data", "r+")
         
         #self.fp = open("player_init.data", "r+")
         for line in self.fp:

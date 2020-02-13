@@ -7,11 +7,11 @@ class health_goblin:
         print("Health Goblin Created")
         self.entities = []
         try:
-            self.fp = open("player_health.data", "r+")
+            self.fp = open("data/player_health.data", "r+")
         except IOError:
-            self.fp = open("player_health.data", "w")
+            self.fp = open("data/player_health.data", "w")
             self.fp.close()
-            self.fp = open("player_health.data", "r+")
+            self.fp = open("data/player_health.data", "r+")
         
         
         #self.fp = open("player_health.data", "r+")
