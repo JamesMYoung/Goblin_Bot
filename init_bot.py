@@ -2,7 +2,7 @@ import random
 
 class init_goblin:
     def __init__(self):
-        print("init_goblin created")
+        print("Init Goblin created")
         self.entities = []
         try:
             self.fp = open("data/player_init.data", "r+")
