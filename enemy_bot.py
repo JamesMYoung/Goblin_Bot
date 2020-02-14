@@ -14,6 +14,18 @@ class enemy_goblin:
             self.fp.close()
             self.fp = open("data/enemy_list.data", "r+")
             
+            
+        for line in self.fp:
+            words = line.split()
+            enemy = {}
+            enemy['name'] = words[0]
+            enemy['damage_done'] = int(words[1])
+            enemy['temp_hp'] = int(words[2])
+            self.enemies.append(enemy)
+            print("Added:" + enemy['name'] + "("
+                           + str(enemy['damage_done'])
+                           + ") - temp_hp: "
+                           + str(enemy['temp_hp']))
     def __del__(self):
         self.fp.seek(0)
         self.fp.truncate(0)
@@ -148,7 +160,8 @@ class enemy_goblin:
                 msg += ' healed for '
                 msg += str(result)
                 msg += ' health ('
-                msg += '-'
+                if enemy["damage_done"] != 0:
+                    msg += '-'
                 msg += str(enemy['damage_done'])
                 msg += ')'
                 
@@ -168,7 +181,73 @@ class enemy_goblin:
         return msg    
         
         
+    def hurt_enemy(self, text):
+        input_str = ''.join(text[4:])
+        msg, result = goblin_handle(input_str)
+        if msg == '``````':
+            msg = ''
+            
+        if isinstance(result, list):
+            msg += '```'
+            msg += 'Error: result in the form of a list - operation requires single value'
+            msg += '```'
+            return msg
+        elif isinstance(result, float):
+            msg += '```'
+            msg += 'rounding value ' + str(result) + ' to ' + str(int(result))
+            msg += '```'
+            result = int(result)
+            
+        death_flag = False
+        for enemy in self.enemies:
+            if enemy['name'] == text[3]:
+                #if temp > 0, sub from temp
+                #else normal health calculation
+                if enemy['temp_hp'] > 0:
+                    #if damage is greater than temp_hp
+                    #subtract temp hp from damage, remove remaining damage
+                    #from player hp
+                    if int(result) > enemy['temp_hp']:
+                        remaining_damage = result - enemy['temp_hp'] 
+                        enemy['temp_hp'] = 0
+                        enemy['hp'] -= remaining_damage
+                    #if damage == temp_hp
+                    #set temp hp = 0
+                    elif int(text[4]) == enemy['temp_hp']:
+                        enemy['temp_hp'] = 0
+                    #if damage < temp_hp
+                    #subtract only from temp_hp
+                    else:
+                        enemy['temp_hp'] -= result
+                        
+                    
+                else:
+                    enemy['damage_done'] += result
+                    
+                if enemy['damage_done'] < 0:
+                    enemy['damage_done'] = 0
+
+                msg += '```'
+                msg += enemy['name']
+                msg += ' took '
+                msg += str(result)
+                msg += ' damage (total damage: '
+                msg += str(enemy['damage_done'])
+                msg += ')'
+                if enemy['temp_hp'] > 0:
+                    msg += ' - Temp HP: '
+                    msg += str(enemy['temp_hp'])
+                
+                msg += '```'
+
+                return msg
+            
+        #should only reach this point if no enemy is found
+        msg += '```'
+        msg += 'enemy not found'
+        msg += '```'
         
+        return msg
         
         
         
