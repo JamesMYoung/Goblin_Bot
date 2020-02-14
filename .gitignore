@@ -26,3 +26,6 @@ __pycache__/enemy_bot.cpython-37.pyc
 __pycache__/enemy_bot.cpython-36.pyc
 data/enemy_list.data
 data/enemy_list.data
+data/character_data.json
+data/enemy_list.data
+__pycache__/char_bot.cpython-36.pyc

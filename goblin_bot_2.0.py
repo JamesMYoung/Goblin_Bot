@@ -15,6 +15,7 @@ from misc_bot import misc_goblin
 from health_bot import health_goblin
 from init_bot import init_goblin
 from enemy_bot import enemy_goblin
+from char_bot import char_goblin
 
 
 #if not discord.opus.is_loaded():
@@ -63,6 +64,8 @@ async def on_message(message):
             msg = Init_Goblin.create_output(text)
         if text[1] == 'enemy':
             msg = Enemy_Goblin.create_output(text)
+        if text[1] == 'char':
+            msg = Char_Goblin.create_output(text)
             
         #if text[1] == 'parse':
         #    input_str = ''.join(text[2:])
@@ -174,5 +177,7 @@ async def on_ready():
     Init_Goblin = init_goblin()
     global Enemy_Goblin
     Enemy_Goblin = enemy_goblin()
+    global Char_Goblin
+    Char_Goblin = char_goblin()
 
 client.run(TOKEN)
