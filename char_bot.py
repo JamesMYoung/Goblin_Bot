@@ -51,6 +51,8 @@ class char_goblin:
             msg = self.create_char(text)
         if text[2] == 'delete':
             msg = self.delete_char(text)
+        if text[2] == 'set':
+            msg = self.set_value(text)
             
         return msg
             
@@ -67,6 +69,8 @@ class char_goblin:
         character['int'] = -1
         character['wis'] = -1
         character['cha'] = -1
+        
+        self.characters.append(character)
         
         msg += "Character succesfully created\n"
         msg += '```'
@@ -97,7 +101,59 @@ class char_goblin:
         
         return msg
         
+    def set_value(self, text):
+        # !G char set Joevellious int 20
+        # This set function can be used to set values for:
+        # Player Name
+        # Core Stats
         
+        name = text[3]
+        parameter = text[4]
+        value = text[5]
+        msg = ''
+        
+        for character in self.characters:
+            if character['name'] == name:
+                msg += '```'
+                
+                if character['name'][-1] == 's':
+                    msg += character['name'] + '\' '
+                else:
+                    msg += character['name'] + '\'s '
+                
+                
+                if parameter == 'str':
+                    character['str'] = int(value)
+                    msg += 'strength set to ' + str(character['str'])
+                if parameter == 'dex':
+                    character['dex'] = int(value)
+                    msg += 'dexterity set to ' + str(character['dex'])
+                if parameter == 'con':
+                    character['con'] = int(value)
+                    msg += 'constitution set to ' + str(character['con'])
+                if parameter == 'int':
+                    character['int'] = int(value)
+                    msg += 'intelligence set to ' + str(character['int'])
+                if parameter == 'wis':
+                    character['wis'] = int(value)
+                    msg += 'wisdom set to ' + str(character['wis'])
+                if parameter == 'cha':
+                    character['cha'] = int(value)
+                    msg += 'charisma set to ' + str(character['cha'])
+                if parameter == 'player_name':
+                    character['player_name'] = str(value)
+                    msg += 'player name set to ' + str(character['player_name'])
+
+                msg += '```'
+                
+                return msg
+                
+        #should only reach this point if no character is found
+        msg += '```'
+        msg += 'Character not found'
+        msg += '```'
+
+        return msg
         
         
         
