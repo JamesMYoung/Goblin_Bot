@@ -292,41 +292,40 @@ class char_goblin:
         
         for character in self.characters:
             if character['name'] == name:
-                
-                roll_type = None
-                guessed_word = ''
-                best_match = 0
-                
-                for keyword in self.core_keywords + self.skill_keywords:
-                    word_dist = jaro_winkler(keyword, str(text[4]))
-                    
-                    if best_match < word_dist:
-                        guessed_word = keyword
-                        best_match = word_dist
-                    # (may) Need to change: if word_dist == 1.0, it's a perfect match
-                    if keyword == text[4]:
-                        roll_type = text[4]
+                keywords = self.core_keywords + self.skill_keywords
         
+                return_msg, roll_type = select_best(keywords, text[4])
+                msg += return_msg
                 if roll_type == None:
-                    msg += 'Could not find parameter \"' + str(text[4]) + '\"\n'
-                    msg += 'Goblin Bot will assume you meant ' + guessed_word + '\n'
-                    roll_type = guessed_word
-                
+                    return msg
+
                 # Should add error message if the stat has not been set yet
                 # i.e. if stat == -1, return error message
                 if roll_type in self.core_keywords:
                     
-                    roll_mod = int((int(character[roll_type]) - 10) / 2)
+                    # Grab score value and ensure it is an int
+                    roll_mod = int(character[roll_type])
+                    # Perform division and use int to floor result
+                    roll_mod = int(roll_mod / 2)
+                    # Subtract 5 to get final modifier value (works for >10 and <10)
+                    roll_mod = roll_mod - 5
                     
                     roll_str = '1d20 + ' + str(roll_mod)
                     
-                    msg, result = goblin_handle(roll_str)
+                    roll_msg, result = goblin_handle(roll_str)
+                    msg += roll_msg
                     
                 elif roll_type in self.skill_keywords:
                     roll_mod = 0
                     prof_bonus = 0
-                
-                    roll_mod += int((int(character[self.skill_to_core[roll_type]]) - 10) / 2)
+                    
+                    
+                    # Grab score value and ensure it is an int
+                    roll_mod = int(character[self.skill_to_core[roll_type]])
+                    # Perform division and use int to floor result
+                    roll_mod = int(roll_mod / 2)
+                    # Subtract 5 to get final modifier value (works for >10 and <10)
+                    roll_mod = roll_mod - 5
                 
                     level = int(character['level'])
                     if level >= 1 and level <= 4:
