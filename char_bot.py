@@ -82,13 +82,13 @@ class char_goblin:
         self.core_keywords = [
             "strength", "dexterity", "constitution",
             "intelligence", "wisdom", "charisma",
-            "level", "speed"           
+            "level", "speed"          
             ]
         self.bool_keywords = [
             "proficiency", "expertise", "saving throws"
         ]
         self.misc_keywords = [
-            "player name"
+            "player name", "all" 
             ]
         
         self.skill_to_core = {
@@ -242,6 +242,8 @@ class char_goblin:
             if value == None:
                 return msg
         # Value for core skill
+        elif parameter == 'all':
+            value = text[5:]
         else:
             value = text[5]
         
@@ -263,7 +265,26 @@ class char_goblin:
                     else:
                         character[parameter][value] = False
                         msg += parameter + ' in ' + value + ' changed from True to False\n'
+                elif parameter == 'all':
+                    if len(value) != 6:
+                        msg = '```'
+                        msg += 'Error, requires 6 values when setting all stats\n'
+                        msg += '(format should be: str dex con int wis cha)\n'
+                        msg += '```'
+                        return msg
+                    else:
+                        character['strength'] = int(value[0])
+                        character['dexterity'] = int(value[1])
+                        character['constitution'] = int(value[2])
+                        character['intelligence'] = int(value[3])
+                        character['wisdom'] = int(value[4])
+                        character['charisma'] = int(value[5])
                         
+                        msg += 'core stats set\n'
+                        msg += '```'
+                        
+                        return msg
+                
                 elif parameter in self.core_keywords:
                     # Add some error checking here for integer values
                     character[parameter] = int(value)
@@ -271,6 +292,8 @@ class char_goblin:
                 elif parameter in self.misc_keywords:
                     character[parameter] = str(value)
                     msg += parameter + ' set to ' + str(character[parameter])
+                
+                    
                 
 
                 msg += '```'
