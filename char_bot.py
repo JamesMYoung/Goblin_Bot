@@ -80,7 +80,8 @@ class char_goblin:
             ]
         self.core_keywords = [
             "strength", "dexterity", "constitution",
-            "intelligence", "wisdom", "charisma"        
+            "intelligence", "wisdom", "charisma",
+            "level", "speed"           
             ]
         self.bool_keywords = [
             "proficiency", "expertise"
@@ -89,6 +90,26 @@ class char_goblin:
             "player name"
             ]
         
+        self.skill_to_core = {
+            "athletics" : "strength",
+            "acrobatics" : "dexterity",
+            "sleight of hand" : "dexterity",
+            "stealth" : "dexterity",
+            "arcana" : "intelligence",
+            "history" : "intelligence",
+            "investigation" : "intelligence",
+            "nature" : "intelligence",
+            "religion" : "intelligence",
+            "animal handling" : "wisdom",
+            "insight" : "wisdom",
+            "medicine" : "wisdom",
+            "perception" : "wisdom",
+            "survival" : "wisdom",
+            "deception" : "charisma",
+            "intimidation" : "charisma",
+            "performance" : "charisma",
+            "persuasion" : "charisma"
+        }
         
         try:
             self.fp = open("data/character_data.json", "r+")
@@ -126,6 +147,8 @@ class char_goblin:
             msg = self.delete_char(text)
         if text[2] == 'set':
             msg = self.set_value(text)
+        if text[2] == 'roll':
+            msg = self.char_roll(text)
             
         return msg
             
@@ -213,7 +236,8 @@ class char_goblin:
         
         value = text[5]
         
-        if parameter == 'proficiency' or parameter == 'expertise':
+        #if parameter == 'proficiency' or parameter == 'expertise':
+        if parameter in self.bool_keywords:
             value = None
             guessed_word = ''
             best_match = 0
@@ -230,25 +254,6 @@ class char_goblin:
                 msg += 'Could not find parameter \"' + str(text[5]) + '\"\n'
                 msg += 'Goblin Bot will assume you meant ' + guessed_word + '\n'
                 value = guessed_word
-            
-        
-        #value = None
-        #bool_dist_check = 0
-        #best_match = ''
-        #for b in self.bool_keywords:
-        #    word_dist = jaro_winkler(b, str(text[5]))
-        #    print("prof, exp word_dist val: " + str(word_dist))
-        #    if word_dist > 0.5 and word_dist > bool_dist_check:
-        #        bool_dist_check = word_dist
-        #        best_match = b
-        #
-        #if value == None:
-        #    value = text[5]
-        #else:
-        #    msg += 'Could not find parameter \"' + str(text[5]) + '\"'
-        #    msg += 'Goblin Bot will assume you meant ' + best_match + '\n'
-        #    skill = best_match
-        
         
         
         for character in self.characters:
@@ -280,31 +285,6 @@ class char_goblin:
                     character[parameter] = str(value)
                     msg += parameter + ' set to ' + str(character[parameter])
                 
-                
-                
-                
-                
-                #if parameter == 'str':
-                #    character['str'] = int(value)
-                #    msg += 'strength set to ' + str(character['str'])
-                #if parameter == 'dex':
-                #    character['dex'] = int(value)
-                #    msg += 'dexterity set to ' + str(character['dex'])
-                #if parameter == 'con':
-                #    character['con'] = int(value)
-                #    msg += 'constitution set to ' + str(character['con'])
-                #if parameter == 'int':
-                #    character['int'] = int(value)
-                #    msg += 'intelligence set to ' + str(character['int'])
-                #if parameter == 'wis':
-                #    character['wis'] = int(value)
-                #    msg += 'wisdom set to ' + str(character['wis'])
-                #if parameter == 'cha':
-                #    character['cha'] = int(value)
-                #    msg += 'charisma set to ' + str(character['cha'])
-                #if parameter == 'player_name':
-                #    character['player_name'] = str(value)
-                #    msg += 'player name set to ' + str(character['player_name'])
 
                 msg += '```'
                 
@@ -316,6 +296,107 @@ class char_goblin:
         msg += '```'
 
         return msg
+        
+    def char_roll(self, text):
+        # !G char roll Joevellious int
+        # !G char roll Joevellious arcana
+        msg = ''
+        name = text[3]
+        
+        for character in self.characters:
+            if character['name'] == name:
+                
+                roll_type = None
+                guessed_word = ''
+                best_match = 0
+                
+                for keyword in self.core_keywords + self.skill_keywords:
+                    word_dist = jaro_winkler(keyword, str(text[4]))
+                    
+                    if best_match < word_dist:
+                        guessed_word = keyword
+                        best_match = word_dist
+                    # (may) Need to change: if word_dist == 1.0, it's a perfect match
+                    if keyword == text[4]:
+                        roll_type = text[4]
+        
+                if roll_type == None:
+                    msg += 'Could not find parameter \"' + str(text[4]) + '\"\n'
+                    msg += 'Goblin Bot will assume you meant ' + guessed_word + '\n'
+                    roll_type = guessed_word
+                
+                # Should add error message if the stat has not been set yet
+                # i.e. if stat == -1, return error message
+                if roll_type in self.core_keywords:
+                    
+                    roll_mod = int((int(character[roll_type]) - 10) / 2)
+                    
+                    roll_str = '1d20 + ' + str(roll_mod)
+                    
+                    msg, result = goblin_handle(roll_str)
+                    
+                elif roll_type in self.skill_keywords:
+                    roll_mod = 0
+                    prof_bonus = 0
+                
+                    roll_mod += int((int(character[self.skill_to_core[roll_type]]) - 10) / 2)
+                
+                    level = int(character['level'])
+                    if level >= 1 and level <= 4:
+                        prof_bonus = 2
+                    elif level >= 5 and level <= 8:
+                        prof_bonus = 3
+                    elif level >= 9 and level <= 12:
+                        prof_bonus = 4
+                    elif level >= 13 and level <= 16:
+                        prof_bonus = 5
+                    else:
+                        prof_bonus = 6
+                    
+                    
+                    if (character['proficiency'][roll_type] == True and
+                        character['expertise'][roll_type] == False):
+                        
+                        roll_mod += prof_bonus
+                        
+                    elif (character['proficiency'][roll_type] == True and
+                          character['expertise'][roll_type] == True):
+
+                        roll_mod += prof_bonus * 2
+                    else:
+                        # This catches both the default case of no bonuses,
+                        # as well as the case in which the player sets expertise
+                        # without proficiency
+                        #roll_mod += int(character[self.skill_to_core[roll_type]])
+                        
+                        # Do nothing?
+                        
+                        pass
+                        
+                    roll_str = '1d20 + ' + str(roll_mod)
+                    msg, result = goblin_handle(roll_str)
+                
+                return msg
+        
+        #should only reach this point if no character is found
+        msg += '```'
+        msg += 'Character not found'
+        msg += '```'
+
+        return msg
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
         
