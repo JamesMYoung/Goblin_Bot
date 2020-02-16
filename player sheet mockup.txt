@@ -1,0 +1,63 @@
++---------------------------------------------+
+| Joevellious
+|
+| +---------+    
+| | STR: 20 |      Saving Throws
+| | mod: +5 |    [ ]  +1 Strength
+| +---------+    [ ]  +2 Dexterity 
+|                [ ]  +2 Constitution
+| +---------+    [o]  +9 Intelligence
+| | DEX: 20 |    [o]  +4 Wisdom
+| | mod: +5 |    [ ]  +0 Charisma
+| +---------+    
+|                Skills
+| +---------+    [ ]  +2 Acrobatics 
+| | CON: 20 |    [ ]   0 Animal Handling
+| | mod: +5 |    [o] +13 Arcana (x2)
+| +---------+    [o]  +5 Athletics
+|                [ ]   0 Deception
+| +---------+    [o]  +9 History
+| | INT: 20 |    [o]  +4 Insight
+| | mod: +5 |    [ ]   0 Intimidation
+| +---------+    [o]  +9 Investigation
+|                [ ]   0 Medicine
+| +---------+    [ ]  +5 Nature
+| | WIS: 20 |    [ ]   0 Perception
+| | mod: +5 |    [ ]   0 Performance
+| +---------+    [ ]   0 Persuasion
+|                [ ]  +5 Religion
+| +---------+    [ ]  +2 Sleight of Hand
+| | CHA: 20 |    [ ]  +2 Stealth
+| | mod: +5 |    [ ]   0 Survival
+| +---------+
+|            
+|            
+|            
+|            
+|            
+|             
+|             
+|             
+|             
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+
+
+
