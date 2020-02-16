@@ -25,9 +25,6 @@ def select_best(keywords, text):
                 best_keyword = str(text)
         
     if best_keyword == None and highest_match > 0.8:
-        #msg += 'Could not find keyword \"' + str(text) + '\"\n'
-        #msg += 'Goblin Bot will assume you meant ' + guessed_word + '\n'
-        
         msg += '```'
         msg += 'Converting \"' + str(text) + '\" to \"' + guessed_word + '\"'
         msg += ' with ' + '{0:.1f}%'.format(highest_match*100) + ' certainty\n'
