@@ -60,6 +60,13 @@ class char_goblin:
         # !G char create Joevellious
         msg = ''
         
+        for character in self.characters:
+            if character['name'] == str(text[3]):
+                msg = '```Character already exists```'
+                return msg
+        
+        
+        
         character = {}
         character['name'] = str(text[3])
         character['player_name'] = "n/a"
@@ -72,7 +79,7 @@ class char_goblin:
         
         self.characters.append(character)
         
-        msg += "Character succesfully created\n"
+        msg += 'Character succesfully created\n'
         msg += '```'
         msg += 'Name: ' + character['name'] + '\n'
         msg += 'Player Name: ' + character['player_name'] + '\n'
