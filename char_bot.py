@@ -401,37 +401,139 @@ class char_goblin:
         # !G char print Joevellious sheet
         msg = ''
         name = text[3]
+        character = None
+        mode = ''
         
-        for character in self.characters:
-            if character['name'] == name:
-                msg += '```\n'
-                str_mod = int(int(character['strength'] / 2) - 5)
-                dex_mod = int(int(character['dexterity'] / 2) - 5)
-                con_mod = int(int(character['constitution'] / 2) - 5)
-                int_mod = int(int(character['intelligence'] / 2) - 5)
-                wid_mod = int(int(character['wisdom'] / 2) - 5)
-                cha_mod = int(int(character['charisma'] / 2) - 5)
-                
-                
-                
-                
-                msg += '+-----------------------------------------+\n'
-                msg += '| {0:39} |'.format(character['name']) + '\n'
-                msg += '|{0:41}|'.format('') + '\n'
-                msg += '| +---------+{0:29}|'.format('') + '\n'
-                msg += '| | STR:{0:3d} |      Saving Throws          |'.format(character['strength']) + '\n'
-                msg += '| | mod:{0:+3d} |    [ ] {1:+3d} Strength         |'.format(str_mod, str_mod) + '\n'
-                
-                msg += '```'
-                return msg
+        for c in self.characters:
+            if c['name'] == name:
+                character = c
         
-        
-        #should only reach this point if no character is found
-        msg += '```'
-        msg += 'Character not found'
-        msg += '```'
+        if character == None:
+            msg += '```'
+            msg += 'Character not found'
+            msg += '```'
+            
+            return msg
 
+        if len(text) == 6:
+            mode = text[5]
+        else:
+            mode = 'simple'
+            
+            
+            
+        if mode == 'simple':
+            msg += '```'
+            msg += 'Name: ' + character['name'] + '\n'
+            msg += 'Core Stats\n'
+            msg += ' STR: {0:2d}'.format(character['strength'])
+            msg += ' DEX: {0:2d}'.format(character['dexterity'])
+            msg += ' CON: {0:2d}\n'.format(character['constitution'])
+            msg += ' INT: {0:2d}'.format(character['intelligence'])
+            msg += ' WIS: {0:2d}'.format(character['wisdom'])
+            msg += ' CHA: {0:2d}\n'.format(character['charisma'])
+            msg += 'Skills\n'
+            
+            level = int(character['level'])
+            
+            if level >= 1 and level <= 4:
+                prof_bonus = 2
+            elif level >= 5 and level <= 8:
+                prof_bonus = 3
+            elif level >= 9 and level <= 12:
+                prof_bonus = 4
+            elif level >= 13 and level <= 16:
+                prof_bonus = 5
+            else:
+                prof_bonus = 6
+            
+            
+            
+            counter = 0
+            for skill in self.skill_keywords:
+            
+                bonus = 0
+            
+                # Grab score value and ensure it is an int
+                bonus = int(character[self.skill_to_core[skill]])
+                # Perform division and use int to floor result
+                bonus = int(bonus / 2)
+                # Subtract 5 to get final modifier value (works for >10 and <10)
+                bonus = bonus - 5
+            
+            
+                
+                if (character['proficiency'][skill] == True and
+                    character['expertise'][skill] == False):
+                    mark = 'o'
+                    bonus += prof_bonus
+                    
+                elif (character['proficiency'][skill] == True and
+                      character['expertise'][skill] == True):
+                    mark = '*'
+                    bonus += prof_bonus * 2
+                    
+                else:
+                    mark = ' '
+                    
+                msg += '[{0}] {1:+3d} {2:16}'.format(mark, bonus, skill) 
+                if counter == 2:
+                    msg += '\n'
+                    counter = 0
+                else:
+                    counter += 1
+                    
+            
+            #[ ] 15+' '
+            #if (character['proficiency'][roll_type] == True and
+            #    character['expertise'][roll_type] == False):
+            #
+            #
+            #Athletics
+            #Acrobatics
+            #Sleight of Hand
+            #Stealth
+            #Arcana
+            #History
+            #Investigation
+            #Nature
+            #Religion
+            #Animal Handling
+            #Insight
+            #Medicine
+            #Perception
+            #Survival
+            #Deception
+            #Intimidation
+            #Performance
+            #Persuasion
+            
+            
+            
+            
+            msg += '```'
+
+        elif mode == 'sheet':    
+            msg += '```\n'
+            str_mod = int(int(character['strength'] / 2) - 5)
+            dex_mod = int(int(character['dexterity'] / 2) - 5)
+            con_mod = int(int(character['constitution'] / 2) - 5)
+            int_mod = int(int(character['intelligence'] / 2) - 5)
+            wid_mod = int(int(character['wisdom'] / 2) - 5)
+            cha_mod = int(int(character['charisma'] / 2) - 5)
+            
+            msg += '+-----------------------------------------+\n'
+            msg += '| {0:39} |'.format(character['name']) + '\n'
+            msg += '|{0:41}|'.format('') + '\n'
+            msg += '| +---------+{0:29}|'.format('') + '\n'
+            msg += '| | STR:{0:3d} |      Saving Throws          |'.format(character['strength']) + '\n'
+            msg += '| | mod:{0:+3d} |    [ ] {1:+3d} Strength         |'.format(str_mod, str_mod) + '\n'
+            
+            msg += '```'
         return msg
+        
+        
+        
         
         
         
