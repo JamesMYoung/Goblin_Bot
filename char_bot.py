@@ -124,7 +124,7 @@ class char_goblin:
             if len(self.characters) > 0:
                 for character in self.characters:
                     print("-Added: " + character['name'])
-                    print("Characters loaded from JSON")
+                print("Characters loaded from JSON")
         except:
             print("No valid character_data file found, will be created on shutdown")
         

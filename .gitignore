@@ -29,3 +29,4 @@ data/enemy_list.data
 data/character_data.json
 data/enemy_list.data
 __pycache__/char_bot.cpython-36.pyc
+__pycache__/goblin_util.cpython-36.pyc
