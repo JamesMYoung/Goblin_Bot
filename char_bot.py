@@ -3,6 +3,7 @@ import json
 from Levenshtein import jaro_winkler
 
 from yaccdice import goblin_handle
+from goblin_util import select_best
 
 # The JSON structure should look like something below
 # Dictionary of Characters (name = keys)
@@ -222,51 +223,27 @@ class char_goblin:
         
         msg = ''
         name = text[3]
-        parameter = None
-        guessed_word = ''
-        best_match = 0
+        keywords = self.core_keywords + self.misc_keywords + self.bool_keywords
         
-        for keyword in self.core_keywords + self.misc_keywords + self.bool_keywords:
-            
-            word_dist = jaro_winkler(keyword, str(text[4]))
-            if best_match < word_dist:
-                guessed_word = keyword
-                best_match = word_dist
-            
-            if keyword == text[4]:
-                parameter = text[4]
-        
+        return_msg, parameter = select_best(keywords, text[4])
+        msg += return_msg
         if parameter == None:
-            msg += 'Could not find parameter \"' + str(text[4]) + '\"\n'
-            msg += 'Goblin Bot will assume you meant ' + guessed_word + '\n'
-            parameter = guessed_word
-        
-        value = text[5]
+            return msg
         
         # proficiency, expertise, saving throws
-        if parameter in self.bool_keywords:
-            value = None
-            guessed_word = ''
-            best_match = 0
-            
+        if parameter in self.bool_keywords:            
             if parameter == "saving throws":
                 keywords = self.core_keywords
             else:
                 keywords = self.skill_keywords
             
-            for keyword in keywords:
-                word_dist = jaro_winkler(keyword, str(text[5]))
-                if best_match < word_dist:
-                    guessed_word = keyword
-                    best_match = word_dist
-                if keyword == text[5]:
-                    value = text[5]
-            
+            return_msg, value = select_best(keywords, text[5])
+            msg += return_msg
             if value == None:
-                msg += 'Could not find parameter \"' + str(text[5]) + '\"\n'
-                msg += 'Goblin Bot will assume you meant ' + guessed_word + '\n'
-                value = guessed_word
-        
+                return msg
+        # Value for core skill
+        else:
+            value = text[5]
         
         for character in self.characters:
             if character['name'] == name:
@@ -276,8 +253,6 @@ class char_goblin:
                     msg += character['name'] + '\' '
                 else:
                     msg += character['name'] + '\'s '
-                
-                
                 
                 if parameter in self.bool_keywords:
                     # Could potentially add expertise error checking
