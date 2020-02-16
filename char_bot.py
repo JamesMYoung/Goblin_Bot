@@ -149,6 +149,9 @@ class char_goblin:
             msg = self.set_value(text)
         if text[2] == 'roll':
             msg = self.char_roll(text)
+        if text[2] == 'print':
+            msg = self.print_sheet(text)
+            
             
         return msg
             
@@ -374,7 +377,8 @@ class char_goblin:
                         pass
                         
                     roll_str = '1d20 + ' + str(roll_mod)
-                    msg, result = goblin_handle(roll_str)
+                    roll_msg, result = goblin_handle(roll_str)
+                    msg += roll_msg
                 
                 return msg
         
@@ -387,12 +391,41 @@ class char_goblin:
         
         
         
+    def print_sheet(self, text):
+        # !G char print Joevellious sheet
+        msg = ''
+        name = text[3]
+        
+        for character in self.characters:
+            if character['name'] == name:
+                msg += '```\n'
+                str_mod = int((character['strength'] - 10) / 2)
+                dex_mod = int((character['dexterity'] - 10) / 2)
+                con_mod = int((character['constitution'] - 10) / 2)
+                int_mod = int((character['intelligence'] - 10) / 2)
+                wid_mod = int((character['wisdom'] - 10) / 2)
+                cha_mod = int((character['charisma'] - 10) / 2)
+                
+                
+                
+                
+                msg += '+-----------------------------------------+\n'
+                msg += '| {0:39} |'.format(character['name']) + '\n'
+                msg += '|{0:41}|'.format('') + '\n'
+                msg += '| +---------+{0:29}|'.format('') + '\n'
+                msg += '| | STR:{0:3d} |      Saving Throws          |'.format(character['strength']) + '\n'
+                msg += '| | mod:{0:+3d} |    [ ] {1:+3d} Strength         |'.format(str_mod, str_mod) + '\n'
+                
+                msg += '```'
+                return msg
         
         
-        
-        
-        
-        
+        #should only reach this point if no character is found
+        msg += '```'
+        msg += 'Character not found'
+        msg += '```'
+
+        return msg
         
         
         
