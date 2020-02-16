@@ -382,12 +382,12 @@ class char_goblin:
         for character in self.characters:
             if character['name'] == name:
                 msg += '```\n'
-                str_mod = int((character['strength'] - 10) / 2)
-                dex_mod = int((character['dexterity'] - 10) / 2)
-                con_mod = int((character['constitution'] - 10) / 2)
-                int_mod = int((character['intelligence'] - 10) / 2)
-                wid_mod = int((character['wisdom'] - 10) / 2)
-                cha_mod = int((character['charisma'] - 10) / 2)
+                str_mod = int(int(character['strength'] / 2) - 5)
+                dex_mod = int(int(character['dexterity'] / 2) - 5)
+                con_mod = int(int(character['constitution'] / 2) - 5)
+                int_mod = int(int(character['intelligence'] / 2) - 5)
+                wid_mod = int(int(character['wisdom'] / 2) - 5)
+                cha_mod = int(int(character['charisma'] / 2) - 5)
                 
                 
                 

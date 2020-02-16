@@ -73,21 +73,48 @@ async def on_message(message):
         # Super handy for testing things on-line
         if text[1] == 'test':
             
-            skill_keywords = [
-            "athletics", "acrobatics", "sleight_of_hand",
-            "stealth", "arcana", "history", "investigation",
-            "nature", "religion", "animal_handling",
-            "insight", "medicine", "perception", "survival",
-            "deception", "intimidation", "performance",
-            "persuasion"
-            ]
+            #skill_keywords = [
+            #"athletics", "acrobatics", "sleight_of_hand",
+            #"stealth", "arcana", "history", "investigation",
+            #"nature", "religion", "animal_handling",
+            #"insight", "medicine", "perception", "survival",
+            #"deception", "intimidation", "performance",
+            #"persuasion"
+            #]
+            #
+            #core_keywords = [
+            #"strength", "dexterity", "constitution",
+            #"intelligence", "wisdom", "charisma"        
+            #]
             
-            core_keywords = [
-            "strength", "dexterity", "constitution",
-            "intelligence", "wisdom", "charisma"        
-            ]
+            char_list = []
+            character1 = {}
+            character2 = {}
+            character3 = {}
+            character1['name'] = 'Joe'
+            character1['level'] = '10'
+            char_list.append(character1)
+            character2['name'] = 'Tim'
+            character2['level'] = '21'
+            char_list.append(character2)
+            character3['name'] = 'Garm'
+            character3['level'] = '20'
+            char_list.append(character3)
             
-            msg, best_keyword = select_best(skill_keywords, text[2])
+            c_ptr = None
+            
+            for character in char_list:
+                if character['name'] == text[2]:
+                    c_ptr = character
+            
+            
+            msg = 'level: ' + str(c_ptr['level']) + '\n'
+            c_ptr['level'] = -1
+            msg += 'new level: ' + str(char_list[0]['level']) + '\n'
+            msg += 'new level: ' + str(char_list[1]['level']) + '\n'
+            msg += 'new level: ' + str(char_list[2]['level']) + '\n'
+            
+            #msg, best_keyword = select_best(skill_keywords, text[2])
             
             #msg = 'finished'
             
