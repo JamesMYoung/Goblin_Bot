@@ -24,7 +24,7 @@ def select_best(keywords, text):
             if keyword == str(text):
                 best_keyword = str(text)
         
-    if best_keyword == None and highest_match > 0.5:
+    if best_keyword == None and highest_match > 0.8:
         #msg += 'Could not find keyword \"' + str(text) + '\"\n'
         #msg += 'Goblin Bot will assume you meant ' + guessed_word + '\n'
         
@@ -34,9 +34,9 @@ def select_best(keywords, text):
         msg += '```'
         
         best_keyword = guessed_word
-    elif highest_match < 0.5:
+    elif highest_match < 0.8:
         msg += '```'
-        msg += 'Unable to recognize ' + str(text) + '\n'
+        msg += 'Unable to recognize input \"' + str(text) + '\"\n'
         msg += '```'
         
     return msg, best_keyword
