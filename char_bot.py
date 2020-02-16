@@ -84,7 +84,7 @@ class char_goblin:
             "level", "speed"           
             ]
         self.bool_keywords = [
-            "proficiency", "expertise"
+            "proficiency", "expertise", "saving throws"
         ]
         self.misc_keywords = [
             "player name"
@@ -171,11 +171,15 @@ class char_goblin:
         character['level'] = 1
         for c in self.core_keywords:
             character[c] = -1
+        character['saving throws'] = {}
         character['proficiency'] = {}
         character['expertise'] = {}
+        for c in self.core_keywords:
+            character['saving throws'][c] = False
         for s in self.skill_keywords:
             character['proficiency'][s] = False
             character['expertise'][s] = False
+        
         
         self.characters.append(character)
         
@@ -239,13 +243,18 @@ class char_goblin:
         
         value = text[5]
         
-        #if parameter == 'proficiency' or parameter == 'expertise':
+        # proficiency, expertise, saving throws
         if parameter in self.bool_keywords:
             value = None
             guessed_word = ''
             best_match = 0
             
-            for keyword in self.skill_keywords:
+            if parameter == "saving throws":
+                keywords = self.core_keywords
+            else:
+                keywords = self.skill_keywords
+            
+            for keyword in keywords:
                 word_dist = jaro_winkler(keyword, str(text[5]))
                 if best_match < word_dist:
                     guessed_word = keyword
