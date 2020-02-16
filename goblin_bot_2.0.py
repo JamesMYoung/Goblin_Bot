@@ -7,7 +7,6 @@ import random
 import re
 import json
 import requests
-from spellchecker import SpellChecker
 import Levenshtein
 
 from roll_bot import roll_goblin
@@ -18,6 +17,8 @@ from health_bot import health_goblin
 from init_bot import init_goblin
 from enemy_bot import enemy_goblin
 from char_bot import char_goblin
+
+from goblin_util import select_best
 
 
 #if not discord.opus.is_loaded():
@@ -86,12 +87,9 @@ async def on_message(message):
             "intelligence", "wisdom", "charisma"        
             ]
             
-            for s in core_keywords:
-                print(s + ': ' + str(Levenshtein.distance(s, text[2])))
-                print(s + ': ' + str(Levenshtein.jaro(s, text[2])))
-                print(s + ': ' + str(Levenshtein.jaro_winkler(s, text[2])))
-
-            msg = 'finished'
+            msg, best_keyword = select_best(skill_keywords, text[2])
+            
+            #msg = 'finished'
             
         #if text[1] == 'parse':
         #    input_str = ''.join(text[2:])
