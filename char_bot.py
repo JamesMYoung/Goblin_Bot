@@ -9,6 +9,60 @@ from yaccdice import goblin_handle
 # - Player Name
 # - Player Discord Username (useful for automating some aspects?)
 # - Core 6 Stats (use another dictionary?)
+# Strength
+# 
+#     Athletics
+# 
+# Dexterity
+# 
+#     Acrobatics
+#     Sleight of Hand
+#     Stealth
+# 
+# Intelligence
+# 
+#     Arcana
+#     History
+#     Investigation
+#     Nature
+#     Religion
+# 
+# Wisdom
+# 
+#     Animal Handling
+#     Insight
+#     Medicine
+#     Perception
+#     Survival
+# 
+# Charisma
+# 
+#     Deception
+#     Intimidation
+#     Performance
+#     Persuasion
+
+
+#     Athletics
+#     Acrobatics
+#     Sleight of Hand
+#     Stealth
+#     Arcana
+#     History
+#     Investigation
+#     Nature
+#     Religion
+#     Animal Handling
+#     Insight
+#     Medicine
+#     Perception
+#     Survival
+#     Deception
+#     Intimidation
+#     Performance
+#     Persuasion
+
+
 
 
 class char_goblin:
@@ -65,17 +119,56 @@ class char_goblin:
                 msg = '```Character already exists```'
                 return msg
         
-        
-        
+
         character = {}
         character['name'] = str(text[3])
         character['player_name'] = "n/a"
+        character['level'] = 1
         character['str'] = -1
         character['dex'] = -1
         character['con'] = -1
         character['int'] = -1
         character['wis'] = -1
         character['cha'] = -1
+        character['profs'] = {}
+        character['profs']['athletics']        = False
+        character['profs']['acrobatics']       = False
+        character['profs']['sleight_of_hand']  = False
+        character['profs']['stealth']          = False
+        character['profs']['arcana']           = False
+        character['profs']['history']          = False
+        character['profs']['investigation']    = False
+        character['profs']['nature']           = False
+        character['profs']['religion']         = False
+        character['profs']['animal_handling']  = False
+        character['profs']['insight']          = False
+        character['profs']['medicine']         = False
+        character['profs']['perception']       = False
+        character['profs']['survival']         = False
+        character['profs']['deception']        = False
+        character['profs']['intimidation']     = False
+        character['profs']['performance']      = False
+        character['profs']['persuasion']       = False
+
+        character['expert'] = {}
+        character['expert']['athletics']       = False
+        character['expert']['acrobatics']      = False
+        character['expert']['sleight_of_hand'] = False
+        character['expert']['stealth']         = False
+        character['expert']['arcana']          = False
+        character['expert']['history']         = False
+        character['expert']['investigation']   = False
+        character['expert']['nature']          = False
+        character['expert']['religion']        = False
+        character['expert']['animal_handling'] = False
+        character['expert']['insight']         = False
+        character['expert']['medicine']        = False
+        character['expert']['perception']      = False
+        character['expert']['survival']        = False
+        character['expert']['deception']       = False
+        character['expert']['intimidation']    = False
+        character['expert']['performance']     = False
+        character['expert']['persuasion']      = False
         
         self.characters.append(character)
         
