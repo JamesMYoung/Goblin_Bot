@@ -7,6 +7,8 @@ import random
 import re
 import json
 import requests
+from spellchecker import SpellChecker
+import Levenshtein
 
 from roll_bot import roll_goblin
 from help_bot import help_goblin
@@ -66,6 +68,30 @@ async def on_message(message):
             msg = Enemy_Goblin.create_output(text)
         if text[1] == 'char':
             msg = Char_Goblin.create_output(text)
+            
+        # Super handy for testing things on-line
+        if text[1] == 'test':
+            
+            skill_keywords = [
+            "athletics", "acrobatics", "sleight_of_hand",
+            "stealth", "arcana", "history", "investigation",
+            "nature", "religion", "animal_handling",
+            "insight", "medicine", "perception", "survival",
+            "deception", "intimidation", "performance",
+            "persuasion"
+            ]
+            
+            core_keywords = [
+            "strength", "dexterity", "constitution",
+            "intelligence", "wisdom", "charisma"        
+            ]
+            
+            for s in core_keywords:
+                print(s + ': ' + str(Levenshtein.distance(s, text[2])))
+                print(s + ': ' + str(Levenshtein.jaro(s, text[2])))
+                print(s + ': ' + str(Levenshtein.jaro_winkler(s, text[2])))
+
+            msg = 'finished'
             
         #if text[1] == 'parse':
         #    input_str = ''.join(text[2:])
