@@ -52,7 +52,17 @@ async def on_message(message):
     if len(text) == 0:
         print('empty message / media')
     
-    elif text[0] == '!G':
+    elif text[0] == '!G' or text[0] == '!G!':
+        if text[0] == '!G!':
+            # working here, need to read in string and then resplit text
+            if input_history.get(message.author) == None:
+                msg = 'No input history found for user'
+                await channel.send(msg)
+                return
+            else:
+                text = input_history[message.author].split()
+                message.content = input_history[message.author]
+    
         if text[1] == 'give' or 'take' or 'uwu' or 'fortune' or 'starwars':
             msg = Misc_Goblin.create_output(text)
         if text[1] == 'help':
@@ -72,65 +82,17 @@ async def on_message(message):
             
         # Super handy for testing things on-line
         if text[1] == 'test':
+            msg = test(text)
             
-            #skill_keywords = [
-            #"athletics", "acrobatics", "sleight_of_hand",
-            #"stealth", "arcana", "history", "investigation",
-            #"nature", "religion", "animal_handling",
-            #"insight", "medicine", "perception", "survival",
-            #"deception", "intimidation", "performance",
-            #"persuasion"
-            #]
-            #
-            #core_keywords = [
-            #"strength", "dexterity", "constitution",
-            #"intelligence", "wisdom", "charisma"        
-            #]
-            
-            char_list = []
-            character1 = {}
-            character2 = {}
-            character3 = {}
-            character1['name'] = 'Joe'
-            character1['level'] = '10'
-            char_list.append(character1)
-            character2['name'] = 'Tim'
-            character2['level'] = '21'
-            char_list.append(character2)
-            character3['name'] = 'Garm'
-            character3['level'] = '20'
-            char_list.append(character3)
-            
-            c_ptr = None
-            
-            for character in char_list:
-                if character['name'] == text[2]:
-                    c_ptr = character
-            
-            
-            msg = 'level: ' + str(c_ptr['level']) + '\n'
-            c_ptr['level'] = -1
-            msg += 'new level: ' + str(char_list[0]['level']) + '\n'
-            msg += 'new level: ' + str(char_list[1]['level']) + '\n'
-            msg += 'new level: ' + str(char_list[2]['level']) + '\n'
-            
-            #msg, best_keyword = select_best(skill_keywords, text[2])
-            
-            #msg = 'finished'
             
         #if text[1] == 'parse':
         #    input_str = ''.join(text[2:])
         #    msg = goblin_handle(input_str)
-            
-        if 'vore' in text:
-            msg = random.choice([
-                "I swear to fucking christ\n",
-                "Someone's about to get banned\n",
-                "Everyone go home, D&D is cancelled\n",
-                "Why did you type that\n"
-                ])
-            
+
         #await client.send_message(message.channel, msg)
+        
+        input_history[message.author] = message.content
+        
         await channel.send(msg)
     elif text[0] == '!Gflip':
         msg = '```The impartial goblin flips a coin and gets '
@@ -205,6 +167,55 @@ async def on_message(message):
 #        msg = '**' + str(msg) + '**' 
 #    #await client.send_message(message.channel, msg)
     
+def test(text):
+    #skill_keywords = [
+    #"athletics", "acrobatics", "sleight_of_hand",
+    #"stealth", "arcana", "history", "investigation",
+    #"nature", "religion", "animal_handling",
+    #"insight", "medicine", "perception", "survival",
+    #"deception", "intimidation", "performance",
+    #"persuasion"
+    #]
+    #
+    #core_keywords = [
+    #"strength", "dexterity", "constitution",
+    #"intelligence", "wisdom", "charisma"        
+    #]
+    
+    char_list = []
+    character1 = {}
+    character2 = {}
+    character3 = {}
+    character1['name'] = 'Joe'
+    character1['level'] = '10'
+    char_list.append(character1)
+    character2['name'] = 'Tim'
+    character2['level'] = '21'
+    char_list.append(character2)
+    character3['name'] = 'Garm'
+    character3['level'] = '20'
+    char_list.append(character3)
+    
+    c_ptr = None
+    
+    for character in char_list:
+        if character['name'] == text[2]:
+            c_ptr = character
+    
+    
+    msg = 'level: ' + str(c_ptr['level']) + '\n'
+    c_ptr['level'] = -1
+    msg += 'new level: ' + str(char_list[0]['level']) + '\n'
+    msg += 'new level: ' + str(char_list[1]['level']) + '\n'
+    msg += 'new level: ' + str(char_list[2]['level']) + '\n'
+    
+    #msg, best_keyword = select_best(skill_keywords, text[2])
+    
+    #msg = 'finished'
+    
+    return msg
+
+
     
 @client.event
 async def on_ready():
@@ -230,5 +241,8 @@ async def on_ready():
     Enemy_Goblin = enemy_goblin()
     global Char_Goblin
     Char_Goblin = char_goblin()
+    
+    global input_history
+    input_history = {}
 
 client.run(TOKEN)
