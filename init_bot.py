@@ -19,7 +19,7 @@ class init_goblin:
             entity['name'] = words[0]
             entity['init'] = int(words[1])
             self.entities.append(entity)
-            print("Added:" + entity['name']+"("
+            print("-Added:" + entity['name']+"("
                            + str(entity['init']) + ")")
 
     def __del__(self):

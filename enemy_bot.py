@@ -22,7 +22,7 @@ class enemy_goblin:
             enemy['damage_done'] = int(words[1])
             enemy['temp_hp'] = int(words[2])
             self.enemies.append(enemy)
-            print("Added:" + enemy['name'] + "("
+            print("-Added:" + enemy['name'] + "("
                            + str(enemy['damage_done'])
                            + ") - temp_hp: "
                            + str(enemy['temp_hp']))

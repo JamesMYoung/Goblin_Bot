@@ -2,7 +2,7 @@ import random
 
 class misc_goblin:
     def __init__(self):
-
+        print('Misc Goblin Created')
         try:
             self.fp = open("data/gold.data", "r+")
             self.gold_counter = int(self.fp.read())
@@ -12,7 +12,7 @@ class misc_goblin:
             self.fp = open("data/gold.data", "r+")
             self.gold_counter = 0
             
-        print('Misc Goblin Created')
+        
         
         
     def __del__(self):

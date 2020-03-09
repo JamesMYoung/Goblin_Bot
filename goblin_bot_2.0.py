@@ -245,4 +245,6 @@ async def on_ready():
     global input_history
     input_history = {}
 
+    print("--Finished Setup--")
+
 client.run(TOKEN)
