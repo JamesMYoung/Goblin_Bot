@@ -24,7 +24,7 @@ class health_goblin:
             entity['true_max'] = int(words[3])
             entity['temp_hp'] = int(words[4])
             self.entities.append(entity)
-            print("Added:" + entity['name'] + "("
+            print("-Added:" + entity['name'] + "("
                            + str(entity['hp']) + "/"
                            + str(entity['max_hp']) + ") - temp_hp: "
                            + str(entity['temp_hp']))
