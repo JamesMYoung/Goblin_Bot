@@ -129,8 +129,6 @@ class char_goblin:
 		except:
 			print("No valid character_data file found, will be created on shutdown")
 		
-		
-		
 	def __del__(self):
 		self.fp.seek(0)
 		self.fp.truncate(0)
@@ -152,7 +150,6 @@ class char_goblin:
 			msg = self.char_roll(text)
 		if text[2] == 'print':
 			msg = self.print_sheet(text)
-			
 			
 		return msg
 			
@@ -223,6 +220,7 @@ class char_goblin:
 		
 		msg = ''
 		name = text[3]
+		character = None
 		keywords = self.core_keywords + self.misc_keywords + self.bool_keywords
 		
 		return_msg, parameter = select_best(keywords, text[4])
@@ -247,65 +245,66 @@ class char_goblin:
 		else:
 			value = text[5]
 		
-		for character in self.characters:
-			if character['name'] == name:
+		for c in self.characters:
+			if c['name'] == name:
+				character = c
+		
+		if character == None:
+			msg += '```'
+			msg += 'Character not found'
+			msg += '```'
+			
+			return msg
+		
+		
+		msg += '```'
+		
+		if character['name'][-1] == 's':
+			msg += character['name'] + '\' '
+		else:
+			msg += character['name'] + '\'s '
+		
+		if parameter in self.bool_keywords:
+			# Could potentially add expertise error checking
+			# aka you need proficiency for expertise
+			if character[parameter][value] == False:
+				character[parameter][value] = True
+				msg += parameter + ' in ' + value + ' changed from False to True\n'
+			else:
+				character[parameter][value] = False
+				msg += parameter + ' in ' + value + ' changed from True to False\n'
+		elif parameter == 'all':
+			if len(value) != 6:
+				msg = '```'
+				msg += 'Error, requires 6 values when setting all stats\n'
+				msg += '(format should be: str dex con int wis cha)\n'
 				msg += '```'
+				return msg
+			else:
+				character['strength'] = int(value[0])
+				character['dexterity'] = int(value[1])
+				character['constitution'] = int(value[2])
+				character['intelligence'] = int(value[3])
+				character['wisdom'] = int(value[4])
+				character['charisma'] = int(value[5])
 				
-				if character['name'][-1] == 's':
-					msg += character['name'] + '\' '
-				else:
-					msg += character['name'] + '\'s '
-				
-				if parameter in self.bool_keywords:
-					# Could potentially add expertise error checking
-					# aka you need proficiency for expertise
-					if character[parameter][value] == False:
-						character[parameter][value] = True
-						msg += parameter + ' in ' + value + ' changed from False to True\n'
-					else:
-						character[parameter][value] = False
-						msg += parameter + ' in ' + value + ' changed from True to False\n'
-				elif parameter == 'all':
-					if len(value) != 6:
-						msg = '```'
-						msg += 'Error, requires 6 values when setting all stats\n'
-						msg += '(format should be: str dex con int wis cha)\n'
-						msg += '```'
-						return msg
-					else:
-						character['strength'] = int(value[0])
-						character['dexterity'] = int(value[1])
-						character['constitution'] = int(value[2])
-						character['intelligence'] = int(value[3])
-						character['wisdom'] = int(value[4])
-						character['charisma'] = int(value[5])
-						
-						msg += 'core stats set\n'
-						msg += '```'
-						
-						return msg
-				
-				elif parameter in self.core_keywords:
-					# Add some error checking here for integer values
-					character[parameter] = int(value)
-					msg += parameter + ' set to ' + str(character[parameter])
-				elif parameter in self.misc_keywords:
-					character[parameter] = str(value)
-					msg += parameter + ' set to ' + str(character[parameter])
-				
-					
-				
-
+				msg += 'core stats set\n'
 				msg += '```'
 				
 				return msg
-				
-		#should only reach this point if no character is found
+		
+		elif parameter in self.core_keywords:
+			# Add some error checking here for integer values
+			character[parameter] = int(value)
+			msg += parameter + ' set to ' + str(character[parameter])
+		elif parameter in self.misc_keywords:
+			character[parameter] = str(value)
+			msg += parameter + ' set to ' + str(character[parameter])
+		
 		msg += '```'
-		msg += 'Character not found'
-		msg += '```'
-
+		
 		return msg
+
 		
 	def char_roll(self, text):
 		# !G char roll Joevellious int
@@ -313,124 +312,127 @@ class char_goblin:
 		# !G char roll Joevellious arcana adv
 		msg = ''
 		name = text[3]
+		character = None
 		
-		for character in self.characters:
-			if character['name'] == name:
-				keywords = self.core_keywords + self.skill_keywords
+		for c in self.characters:
+			if c['name'] == name:
+				character = c
 		
-				return_msg, roll_type = select_best(keywords, text[4])
-				msg += return_msg
-				if roll_type == None:
-					return msg
+		if character == None:
+			msg += '```'
+			msg += 'Character not found'
+			msg += '```'
+			
+			return msg
 
-				# Should add error message if the stat has not been set yet
-				# i.e. if stat == -1, return error message
-				if roll_type in self.core_keywords:
-					
-					# Grab score value and ensure it is an int
-					roll_mod = int(character[roll_type])
-					# Perform division and use int to floor result
-					roll_mod = int(roll_mod / 2)
-					# Subtract 5 to get final modifier value (works for >10 and <10)
-					roll_mod = roll_mod - 5
-					
-					if len(text) == 6:
-						if text[5].lower() == 'adv':
-							roll_str = 'adv '
-						if text[5].lower() == 'dis':
-							roll_str = 'dis '
-					else:
-						roll_str = '1d20 '
-					
-					#if roll_mod < 0:
-					#	roll_str += ' ' + str(roll_mod)
-					#else:
-					#	roll_str += ' + ' + str(roll_mod)
-					
-					roll_str += ' + ' + str(roll_mod)
-					
-					roll_msg, result = goblin_handle(roll_str)
-					msg += roll_msg
-					
-				elif roll_type in self.skill_keywords:
-					roll_mod = 0
-					prof_bonus = 0
-					
-					
-					# Grab score value and ensure it is an int
-					roll_mod = int(character[self.skill_to_core[roll_type]])
-					# Perform division and use int to floor result
-					roll_mod = int(roll_mod / 2)
-					# Subtract 5 to get final modifier value (works for >10 and <10)
-					roll_mod = roll_mod - 5
+		keywords = self.core_keywords + self.skill_keywords
+		
+		return_msg, roll_type = select_best(keywords, text[4])
+		msg += return_msg
+		if roll_type == None:
+			return msg
+
+		# Should add error message if the stat has not been set yet
+		# i.e. if stat == -1, return error message
+		if roll_type in self.core_keywords:
+			
+			# Grab score value and ensure it is an int
+			roll_mod = int(character[roll_type])
+			# Perform division and use int to floor result
+			roll_mod = int(roll_mod / 2)
+			# Subtract 5 to get final modifier value (works for >10 and <10)
+			roll_mod = roll_mod - 5
+			
+			if len(text) == 6:
+				if text[5].lower() == 'adv':
+					roll_str = 'adv '
+				if text[5].lower() == 'dis':
+					roll_str = 'dis '
+			else:
+				roll_str = '1d20 '
+			
+			#if roll_mod < 0:
+			#	roll_str += ' ' + str(roll_mod)
+			#else:
+			#	roll_str += ' + ' + str(roll_mod)
+			
+			roll_str += ' + ' + str(roll_mod)
+			
+			roll_msg, result = goblin_handle(roll_str)
+			msg += roll_msg
+			
+		elif roll_type in self.skill_keywords:
+			roll_mod = 0
+			prof_bonus = 0
+			
+			
+			# Grab score value and ensure it is an int
+			roll_mod = int(character[self.skill_to_core[roll_type]])
+			# Perform division and use int to floor result
+			roll_mod = int(roll_mod / 2)
+			# Subtract 5 to get final modifier value (works for >10 and <10)
+			roll_mod = roll_mod - 5
+		
+			level = int(character['level'])
+			if level == -1:
+				msg += 'Warning: Character level not yet set, defaulting to proficiency bonus of 0\n'
+				prof_bonus = 0
+			elif level >= 1 and level <= 4:
+				prof_bonus = 2
+			elif level >= 5 and level <= 8:
+				prof_bonus = 3
+			elif level >= 9 and level <= 12:
+				prof_bonus = 4
+			elif level >= 13 and level <= 16:
+				prof_bonus = 5
+			else:
+				prof_bonus = 6
+			
+			
+			
+			if (character['proficiency'][roll_type] == True and
+				character['expertise'][roll_type] == False):
 				
-					level = int(character['level'])
-					if level == -1:
-						msg += 'Warning: Character level not yet set, defaulting to proficiency bonus of 0\n'
-						prof_bonus = 0
-					elif level >= 1 and level <= 4:
-						prof_bonus = 2
-					elif level >= 5 and level <= 8:
-						prof_bonus = 3
-					elif level >= 9 and level <= 12:
-						prof_bonus = 4
-					elif level >= 13 and level <= 16:
-						prof_bonus = 5
-					else:
-						prof_bonus = 6
-					
-					
-					
-					if (character['proficiency'][roll_type] == True and
-						character['expertise'][roll_type] == False):
-						
-						roll_mod += prof_bonus
-						
-					elif (character['proficiency'][roll_type] == True and
-						  character['expertise'][roll_type] == True):
-
-						roll_mod += prof_bonus * 2
-					else:
-						# This catches both the default case of no bonuses,
-						# as well as the case in which the player sets expertise
-						# without proficiency
-						#roll_mod += int(character[self.skill_to_core[roll_type]])
-						
-						# Do nothing?
-						
-						pass
-						
-					
-					if len(text) == 6:
-						if text[5].lower() == 'adv':
-							roll_str = 'adv '
-						if text[5].lower() == 'dis':
-							roll_str = 'dis '
-					else:
-						roll_str = '1d20 '
-					
-					roll_str += ' + ' + str(roll_mod)
-					
-					# This solves the issue of 1d20 + -2
-					# However, it would be better to add the unary minus operator
-					# to provide a more robust grammar
-					#if roll_mod < 0:
-					#	roll_str += ' ' + str(roll_mod)
-					#else:
-					#	roll_str += ' + ' + str(roll_mod)
-					
-					print('roll_str: ', roll_str)
-					
-					roll_msg, result = goblin_handle(roll_str)
-					msg += roll_msg
+				roll_mod += prof_bonus
 				
-				return msg
-		
-		#should only reach this point if no character is found
-		msg += '```'
-		msg += 'Character not found'
-		msg += '```'
+			elif (character['proficiency'][roll_type] == True and
+				  character['expertise'][roll_type] == True):
 
+				roll_mod += prof_bonus * 2
+			else:
+				# This catches both the default case of no bonuses,
+				# as well as the case in which the player sets expertise
+				# without proficiency
+				#roll_mod += int(character[self.skill_to_core[roll_type]])
+				
+				# Do nothing?
+				
+				pass
+				
+			
+			if len(text) == 6:
+				if text[5].lower() == 'adv':
+					roll_str = 'adv '
+				if text[5].lower() == 'dis':
+					roll_str = 'dis '
+			else:
+				roll_str = '1d20 '
+			
+			roll_str += ' + ' + str(roll_mod)
+			
+			# This solves the issue of 1d20 + -2
+			# However, it would be better to add the unary minus operator
+			# to provide a more robust grammar
+			#if roll_mod < 0:
+			#	roll_str += ' ' + str(roll_mod)
+			#else:
+			#	roll_str += ' + ' + str(roll_mod)
+			
+			print('roll_str: ', roll_str)
+			
+			roll_msg, result = goblin_handle(roll_str)
+			msg += roll_msg
+		
 		return msg
 		
 		
