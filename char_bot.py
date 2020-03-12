@@ -342,11 +342,12 @@ class char_goblin:
 					else:
 						roll_str = '1d20 '
 					
-					if roll_mod < 0:
-						roll_str += ' ' + str(roll_mod)
-					else:
-						roll_str += ' + ' + str(roll_mod)
+					#if roll_mod < 0:
+					#	roll_str += ' ' + str(roll_mod)
+					#else:
+					#	roll_str += ' + ' + str(roll_mod)
 					
+					roll_str += ' + ' + str(roll_mod)
 					
 					roll_msg, result = goblin_handle(roll_str)
 					msg += roll_msg
@@ -408,13 +409,15 @@ class char_goblin:
 					else:
 						roll_str = '1d20 '
 					
+					roll_str += ' + ' + str(roll_mod)
+					
 					# This solves the issue of 1d20 + -2
 					# However, it would be better to add the unary minus operator
 					# to provide a more robust grammar
-					if roll_mod < 0:
-						roll_str += ' ' + str(roll_mod)
-					else:
-						roll_str += ' + ' + str(roll_mod)
+					#if roll_mod < 0:
+					#	roll_str += ' ' + str(roll_mod)
+					#else:
+					#	roll_str += ' + ' + str(roll_mod)
 					
 					print('roll_str: ', roll_str)
 					

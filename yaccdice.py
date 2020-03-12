@@ -215,6 +215,11 @@ def p_roll_dis(p):
 		p[0] = roll_2
 	
 	
+def p_unary_minus(p):
+    'term : MINUS term'
+    p[0] = -p[2]
+
+
 #this converts roll tokens into number tokens
 #I have no idea if this should or should not be done
 #but it feels future-proofy, so that's good
