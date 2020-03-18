@@ -86,10 +86,31 @@ class char_goblin:
 			]
 		self.bool_keywords = [
 			"proficiency", "expertise", "saving throws"
-		]
-		self.misc_keywords = [
-			"player name", "all" 
 			]
+		self.misc_keywords = [
+			"player name", "all", "background"
+			]
+		self.background_keywords = [
+			"acolyte", "charlatan", "criminal", "entertainer",
+			"folk hero", "guild artisan", "hermit", "noble",
+			"outlander", "sage", "sailor", "soldier", "urchin"
+			]
+			
+		self.background_to_skills = {
+			"acolyte" : ["insight", "religion"],
+			"charlatan" : ["deception", "sleight of hand"],
+			"criminal" : ["deception", "stealth"],
+			"entertainer" : ["acrobatics", "performance"],
+			"folk hero" : ["animal handling", "survival"],
+			"guild artisan" : ["insight", "persuasion"],
+			"hermit" : ["medicine", "religion"],
+			"noble" : ["history", "persuasion"],
+			"outlander" : ["athletics", "survival"],
+			"sage" : ["arcana", "history"],
+			"sailor" : ["athletics", "perception"],
+			"soldier" : ["athletics", "intimidation"],
+			"urchin" : ["sleight of hand", "stealth"]
+			}
 		
 		self.skill_to_core = {
 			"athletics" : "strength",
@@ -165,8 +186,9 @@ class char_goblin:
 
 		character = {}
 		character['name'] = str(text[3])
-		character['player name'] = "n/a"
+		character['player name'] = "none"
 		character['level'] = 1
+		character['background'] = 'none'
 		for c in self.core_keywords:
 			character[c] = -1
 		character['saving throws'] = {}
@@ -177,6 +199,7 @@ class char_goblin:
 		for s in self.skill_keywords:
 			character['proficiency'][s] = False
 			character['expertise'][s] = False
+		
 		
 		
 		self.characters.append(character)
@@ -217,6 +240,7 @@ class char_goblin:
 		# Core Stats
 		# Proficiencies and Expertise
 		# !G char set Joevellious athletics expertise
+		# !G char set Joevellious background sage
 		
 		msg = ''
 		name = text[3]
@@ -242,9 +266,15 @@ class char_goblin:
 		# Value for core skill
 		elif parameter == 'all':
 			value = text[5:]
+		elif parameter == 'background':
+			return_msg, value = select_best(self.background_keywords, text[5])
+			msg += return_msg
+			if value == None:
+				return_msg
 		else:
 			value = text[5]
-		
+			
+
 		for c in self.characters:
 			if c['name'] == name:
 				character = c
@@ -297,9 +327,27 @@ class char_goblin:
 			# Add some error checking here for integer values
 			character[parameter] = int(value)
 			msg += parameter + ' set to ' + str(character[parameter])
+		elif parameter == 'background':
+			msg += parameter + ' set to ' + str(value).capitalize() + '\n'
+
+			# set old background skills to false
+			# check exception for "none"
+			if character['background'] == 'none':
+				pass
+			else:
+				for s in self.background_to_skills[character['background']]:
+					msg += 'removing ' + s + ' proficiency\n'
+					character['proficiency'][s] = False
+					
+			character[parameter] = str(value)
+			
+			for s in self.background_to_skills[character['background']]:
+				msg += 'adding ' + s + ' proficiency\n'
+				character['proficiency'][s] = True
 		elif parameter in self.misc_keywords:
 			character[parameter] = str(value)
 			msg += parameter + ' set to ' + str(character[parameter])
+			
 		
 		msg += '```'
 		
