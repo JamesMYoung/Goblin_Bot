@@ -64,7 +64,7 @@ async def on_message(message):
 				text = input_history[message.author].split()
 				message.content = input_history[message.author]
 	
-		if text[1] == 'give' or 'take' or 'uwu' or 'fortune' or 'starwars':
+		if text[1] == 'give' or 'take' or 'uwu' or 'fortune' or 'starwars' or 'cryptography':
 			msg = Misc_Goblin.create_output(text)
 		if text[1] == 'help':
 			msg = Help_Goblin.create_output(text)
