@@ -12,9 +12,6 @@ class misc_goblin:
 			self.fp = open("data/gold.data", "r+")
 			self.gold_counter = 0
 			
-		
-		
-		
 	def __del__(self):
 		print("Stashing gold into hoard")
 		self.fp.seek(0)
@@ -120,6 +117,7 @@ class misc_goblin:
 		
 		file.close()
 		return msg
+		
 	def cryptography(self, text):
 		msg = 'https://www.youtube.com/watch?v=i_tPnQa-WAE&'
 		return msg

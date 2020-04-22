@@ -93,8 +93,11 @@ async def on_message(message):
 		#await client.send_message(message.channel, msg)
 		
 		input_history[message.author] = message.content
-		
-		await channel.send(msg)
+		try:
+			await channel.send(msg)
+		except:
+			print("Error sending msg: \"" + msg + "\"")
+			
 	elif text[0] == '!Gflip':
 		msg = '```The impartial goblin flips a coin and gets '
 		if(random.randrange(0, 1) == 0):
@@ -217,18 +220,18 @@ def test(text):
 	return msg
 
 async def update_presence_loop():
-	sec_count = 0
+	#sec_count = 0
+	await asyncio.sleep(30)
 	while(True):
+
+		#if sec_count == 30:
+		#	sec_count = 0
+		print("Changing Game Message...")
+		game = discord.Game(random.choice(idle_messages))
+		await client.change_presence(activity=game)
 		
-		
-		if sec_count == 30:
-			sec_count = 0
-			print("Changing Game Message...")
-			game = discord.Game(random.choice(idle_messages))
-			await client.change_presence(activity=game)
-		
-		sec_count += 1
-		await asyncio.sleep(1)
+		#sec_count += 1
+		await asyncio.sleep(30)
 	
 @client.event
 async def on_ready():
