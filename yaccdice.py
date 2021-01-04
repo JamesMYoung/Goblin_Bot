@@ -105,7 +105,44 @@ def p_term_list_cont(p):
     
     p[0] = temp_list
     
-
+    
+def p_reroll_list(p):
+    '''reroll_list : term COMMA term'''
+    global msg
+    #msg = '```' # clear message
+    
+    temp_list = []
+    temp_list.append(p[1])
+    temp_list.append(p[3])
+    
+    print("reroll temp list begin")
+    print(temp_list)
+    
+    #msg += 'results: ' + str(p[1]) + ', ' + str(p[3]) + '\n'
+    
+    p[0] = temp_list
+    
+def p_reroll_list_cont(p):
+    '''reroll_list : reroll_list COMMA term'''
+    global msg
+    #msg = '```' # clear message
+    
+    temp_list = p[1]
+    
+    temp_list.append(p[3])
+    
+    print("reroll temp list continue")
+    print(temp_list)
+    
+    #msg += 'results: ' 
+    #for i in temp_list:
+    #    msg += str(i) + ', '
+    #msg = msg[:-2]
+    #msg += '\n'
+    
+    p[0] = temp_list
+    
+    
 
 def p_term_math(p):
     '''term : term PLUS term
@@ -165,6 +202,102 @@ def p_roll(p):
     #lazily trims off last ', '
     msg = msg[:-2]
     msg += '\n'
+    
+    msg += ' total: '
+    msg += str(roll_sum)
+    if roll_sum <= 1:
+        msg += ' *oof*'
+    msg += '\n'
+        
+    print(rolls)
+    print(roll_sum)
+    
+    #p[0] = p[1] + p[3]
+    p[0] = roll_sum
+
+def p_roll_reroll(p):
+    '''roll : NUMBER D NUMBER RR LPAREN reroll_list RPAREN'''
+    global msg
+    print(msg)
+    # Clear message from term_list output
+    #msg = '```'
+    
+    for pp in p:
+        print(pp)
+    msg += "dice-roll: "
+    msg += str(p[1]) + "d" + str(p[3]) + " (rerolling: "
+    
+    rr_list = []
+    
+    if isinstance(p[6], list):
+        rr_list = p[6]
+        for i in range(len(p[6])-1):
+            msg += str(p[6][i]) + ", "
+        msg += str(p[6][-1]) + ")\n"
+    else:
+        rr_list.append(p[6])
+        msg += str(p[6]) + ")\n"
+    
+    print(rr_list)
+    
+    rolls = []
+    for i in range(0, p[1]):
+        roll = random.randrange(1, p[3]+1)
+        rolls.append(roll)
+    
+    roll_sum = 0
+    if p[1] > 1:
+        msg += ' rolls: '
+    else:
+        msg += ' roll: '
+       
+    for roll in rolls:
+        # If roll hits max, do something special
+        if roll == p[3]:
+            msg += '*' + str(roll) + '*'
+        else:
+            msg += str(roll) 
+        msg += ', '
+        roll_sum += roll
+    #lazily trims off last ', '
+    msg = msg[:-2]
+    msg += '\n'
+    
+    print("rolls before:")
+    print(rolls)
+    
+    count = 0
+    rerolled = False
+    for roll in rolls:
+        if roll in rr_list:
+            rerolled = True
+            msg += " reroll!: " + str(roll) + " -> "
+            roll = random.randrange(1, p[3]+1)
+            msg += str(roll) + "\n"
+            rolls[count] = roll
+        count += 1
+        
+    print("rolls after:")
+    print(rolls)
+    
+    if rerolled:
+        roll_sum = 0
+        if p[1] > 1:
+            msg += ' new rolls: '
+        else:
+            msg += ' new roll: '
+        
+        for roll in rolls:
+            # If roll hits max, do something special
+            if roll == p[3]:
+                msg += '*' + str(roll) + '*'
+            else:
+                msg += str(roll) 
+            msg += ', '
+            roll_sum += roll
+        #lazily trims off last ', '
+        msg = msg[:-2]
+        msg += '\n'
     
     msg += ' total: '
     msg += str(roll_sum)

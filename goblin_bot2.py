@@ -70,6 +70,10 @@ async def on_message(message):
 			msg = Help_Goblin.create_output(text)
 		if text[1] == 'roll':
 			msg = Roll_Goblin.create_output(text)
+			if msg == ':thinking:':
+				pass
+			else:
+				msg = '```' + message.author.nick + ' rolled: \n' + msg[3:]
 		if text[1] == 'lookup':
 			msg = Spell_Lookup_Goblin.create_output(text)
 		if text[1] == 'health':
@@ -232,6 +236,7 @@ async def update_presence_loop():
 		
 		#sec_count += 1
 		await asyncio.sleep(30)
+		
 	
 @client.event
 async def on_ready():
@@ -273,5 +278,10 @@ async def on_ready():
 
 	print("--Finished Setup--")
 
-client.loop.create_task(update_presence_loop())
-client.run(TOKEN)
+def startup():
+	client.loop.create_task(update_presence_loop())
+	client.run(TOKEN)
+	
+if __name__ == "__main__":
+	client.loop.create_task(update_presence_loop())
+	client.run(TOKEN)

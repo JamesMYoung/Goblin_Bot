@@ -22,9 +22,11 @@ tokens = (
     'LPAREN',
     'RPAREN',
     'COMMA',
+	'COLON',
     'D',
 	'ADV',
-	'DIS'
+	'DIS',
+	'RR'
 )
 
 # Regular expression rules for simple tokens
@@ -35,9 +37,11 @@ t_DIVIDE  = r'/'
 t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
 t_COMMA   = r','
+t_COLON   = r':'
 t_D = r'[dD]'
 t_ADV = r'[aA][dD][vV]'
 t_DIS = r'[dD][iI][sS]'
+t_RR = r'[rR][rR]'
 
 
 
