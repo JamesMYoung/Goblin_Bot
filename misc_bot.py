@@ -100,7 +100,7 @@ class misc_goblin:
 	def starwars(self, text):
 		msg = ''
 		msg = '```'
-		file = open("starwars.data", "r+")
+		file = open("data/starwars.data", "r+")
 		
 		quotes = []
 		
@@ -110,7 +110,6 @@ class misc_goblin:
 			elif line[0] == '-':
 				quotes.append(line[1:])
 		
-		print(quotes)
 		output = random.choice(quotes)
 		msg += output
 		msg += '```'
