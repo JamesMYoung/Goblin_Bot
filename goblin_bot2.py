@@ -18,6 +18,7 @@ from health_bot import health_goblin
 from init_bot import init_goblin
 from enemy_bot import enemy_goblin
 from char_bot import char_goblin
+from macro_bot import macro_goblin
 
 from goblin_util import select_best
 
@@ -52,8 +53,18 @@ async def on_message(message):
 	
 	if len(text) == 0:
 		print('empty message / media')
+		return 
 	
-	elif text[0] == '!G' or text[0] == '!G!':
+	# GM is a special mode for macros
+	if text[0] == '!GM':
+		msg, text = Macro_Goblin.create_output(text)
+		
+		if text == None:
+			await channel.send(msg)
+			return 
+	
+	
+	if text[0] == '!G' or text[0] == '!G!':
 		if text[0] == '!G!':
 			# working here, need to read in string and then resplit text
 			if input_history.get(message.author) == None:
@@ -264,6 +275,8 @@ async def on_ready():
 	Enemy_Goblin = enemy_goblin()
 	global Char_Goblin
 	Char_Goblin = char_goblin()
+	global Macro_Goblin
+	Macro_Goblin = macro_goblin()
 	
 	global input_history
 	input_history = {}
