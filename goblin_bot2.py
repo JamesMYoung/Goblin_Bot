@@ -9,6 +9,12 @@ import json
 import requests
 import Levenshtein
 import asyncio
+import os
+import sys
+
+import socket
+import threading
+
 
 from roll_bot import roll_goblin
 from help_bot import help_goblin
@@ -36,6 +42,10 @@ TOKEN = 'NTA2MzI2NzAyNDk0ODQyODgw.DrgqiA.DCiQQX5Ak5RZ_rOlB4teK8U-HKU'
 
 client = discord.Client()
 
+bound_channel = None
+threads = []
+stop_threads = False
+
 @client.event
 async def on_message(message):
 	channel = message.channel
@@ -54,6 +64,11 @@ async def on_message(message):
 	if len(text) == 0:
 		print('empty message / media')
 		return 
+	
+	if text[0] == '!GBind':
+		bound_channel = channel
+		msg = "```Goblin Bot bound to " + str(bound_channel.name) + ".```"
+		await channel.send(msg)
 	
 	# GM is a special mode for macros
 	if text[0] == '!GM':
@@ -178,7 +193,8 @@ async def on_message(message):
 	else:
 		return
 	
-		
+    
+
 #def roll_range(x, y):
 #	 #msg = message.author.name + " rolled a: "
 #	 msg += str(random.randrange(x, y))
@@ -234,10 +250,54 @@ def test(text):
 	
 	return msg
 
+def start_server():
+	print("Server starting")
+	PORT = 5001
+
+	SERVER = socket.gethostbyname(socket.gethostname())
+	
+	ADDRESS = (SERVER, PORT)
+	
+	FORMAT = "utf-8"
+	
+	clients, names = [], []
+	
+	server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	
+	server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+	server.bind(ADDRESS)
+	
+	print("Server is working on " + SERVER)
+	server.listen(5)
+	    
+	while True:
+		conn, addr = server.accept()
+		conn.send("NAME".encode(FORMAT))
+	        
+		name = conn.recv(1024).decode(FORMAT)
+	        
+		names.append(name)
+		clients.append(conn)
+	        
+		thread = threading.Thread(target = handle, args = (conn, addr))
+		thread.daemon = True   
+		thread.start()
+		
+def handle(conn, addr):
+    print("handle")
+    
+    connected = True
+    
+    while connected:
+        message = conn.recv(1024)
+        print("message: ", message.decode())
+
+
 async def update_presence_loop():
 	#sec_count = 0
 	await asyncio.sleep(30)
 	while(True):
+		
 
 		#if sec_count == 30:
 		#	sec_count = 0
@@ -288,6 +348,8 @@ async def on_ready():
 		"Programming at Home",
 		"Counting Gold"
 		]
+	
+	
 
 	print("--Finished Setup--")
 
@@ -296,5 +358,15 @@ def startup():
 	client.run(TOKEN)
 	
 if __name__ == "__main__":
-	client.loop.create_task(update_presence_loop())
-	client.run(TOKEN)
+	try:
+		client.loop.create_task(update_presence_loop())
+		thread = threading.Thread(target=start_server)
+		thread.daemon = True
+		thread.start()
+		client.run(TOKEN)
+	except KeyboardInterrupt:
+		print("ctrl-c")
+		try:
+			sys.exit(0)
+		except SystemExit:
+			os._exit(0)
