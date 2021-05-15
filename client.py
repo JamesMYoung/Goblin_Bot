@@ -7,7 +7,7 @@ from tkinter import ttk
 
 
 
-PORT = 5000 # why not 5000?
+PORT = 5001 # why not 5000?
 SERVER = socket.gethostbyname(socket.gethostname())
 ADDRESS = (SERVER, PORT)
 FORMAT = "utf-8"
