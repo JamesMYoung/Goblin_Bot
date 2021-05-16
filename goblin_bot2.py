@@ -215,6 +215,11 @@ async def on_message(message):
 	
     
 async def command_handler(text, channel, userNickname):
+	if text is None or len(text) == 0:
+		print("Empty message")
+		return
+    
+    
 	if text[0] == '!G' or text[0] == '!G!':
 		
 ### Repeated commands do not work in this scheme
@@ -467,11 +472,11 @@ async def handle_command_loop():
 	while(True):
 		global command_queue
 		if len(command_queue) == 0:
-			pass
+			await asyncio.sleep(1)
 		else:
 			cmd = command_queue.pop()
 			await command_handler(cmd[0], cmd[1], cmd[2])
-		await asyncio.sleep(1)
+		
 	
 @client.event
 async def on_ready():
