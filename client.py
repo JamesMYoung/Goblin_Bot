@@ -56,47 +56,73 @@ class GUI:
         self.name = name
         # to show chat window
         self.Window.deiconify()
-        self.Window.title("CHATROOM")
+        self.Window.title("GOBLIN BOT 3.0")
         self.Window.resizable(width = False,
                               height = False)
-        self.Window.configure(width = 470,
-                              height = 550,
-                              bg = "#17202A")
-        self.labelHead = tk.Label(self.Window,
-                             bg = "#17202A", 
-                              fg = "#EAECEE",
-                              text = self.name ,
-                               font = "Helvetica 13 bold",
-                               pady = 5)
+        self.Window.configure(width = 680,
+                              height = 550)#,
+                              #bg = "#17202A")
+        # self.labelHead = tk.Label(self.Window,
+        #                      bg = "#17202A", 
+        #                       fg = "#EAECEE",
+        #                       text = self.name ,
+        #                        font = "Helvetica 13 bold",
+        #                        pady = 5)
           
-        self.labelHead.place(relwidth = 1)
-        self.line = tk.Label(self.Window,
-                          width = 450,
-                          bg = "#ABB2B9")
+        # self.labelHead.place(relwidth = 1)
+        # self.line = tk.Label(self.Window,
+        #                   width = 450,
+        #                   bg = "#ABB2B9")
           
-        self.line.place(relwidth = 1,
-                        rely = 0.07,
-                        relheight = 0.012)
+        # self.line.place(relwidth = 1,
+        #                 rely = 0.07,
+        #                 relheight = 0.012)
           
-        self.textCons = tk.Text(self.Window,
-                             width = 20, 
-                             height = 2,
-                             bg = "#17202A",
-                             fg = "#EAECEE",
-                             font = "Helvetica 14", 
-                             padx = 5,
-                             pady = 5)
+        # self.textCons = tk.Text(self.Window,
+        #                      width = 20, 
+        #                      height = 2,
+        #                      bg = "#17202A",
+        #                      fg = "#EAECEE",
+        #                      font = "Helvetica 14", 
+        #                      padx = 5,
+        #                      pady = 5)
           
-        self.textCons.place(relheight = 0.745,
-                            relwidth = 1, 
-                            rely = 0.08)
-          
+        # self.textCons.place(relheight = 0.745,
+        #                     relwidth = 1, 
+        #                     rely = 0.08)
+        
+        self.button_flip = tk.Button(self.Window, text="flip")
+        self.button_flip.pack()
+        
+        self.button_d4 = tk.Button(self.Window, text="d4")
+        self.button_d4.pack()
+        
+        self.button_d6 = tk.Button(self.Window, text="d6")
+        self.button_d6.pack()
+        
+        self.button_d8 = tk.Button(self.Window, text="d8")
+        self.button_d8.pack()
+        
+        self.button_d10 = tk.Button(self.Window, text="d10")
+        self.button_d10.pack()
+        
+        self.button_d12 = tk.Button(self.Window, text="d12")
+        self.button_d12.pack()
+        
+        self.button_d20 = tk.Button(self.Window, text="d20")
+        self.button_d20.pack()
+        
+        self.button_d20 = tk.Button(self.Window, text="d100")
+        self.button_d20.pack()
+        
+        
         self.labelBottom = tk.Label(self.Window,
                                  bg = "#ABB2B9",
                                  height = 80)
           
-        self.labelBottom.place(relwidth = 1,
-                               rely = 0.825)
+        #self.labelBottom.place(relwidth = 1,
+        #                       rely = 0.95)
+        self.labelBottom.pack()
           
         self.entryMsg = tk.Entry(self.labelBottom,
                               bg = "#2C3E50",
@@ -105,10 +131,12 @@ class GUI:
           
         # place the given widget
         # into the gui window
-        self.entryMsg.place(relwidth = 0.74,
-                            relheight = 0.06,
-                            rely = 0.008,
-                            relx = 0.011)
+        # self.entryMsg.place(relwidth = 0.74,
+        #                     relheight = 0.06,
+        #                     rely = 0.008,
+        #                     relx = 0.011)
+		
+        self.entryMsg.pack()
           
         self.entryMsg.focus()
           
@@ -120,28 +148,30 @@ class GUI:
                                 bg = "#ABB2B9",
                                 command = lambda : self.sendButton(self.entryMsg.get()))
           
-        self.buttonMsg.place(relx = 0.77,
-                             rely = 0.008,
-                             relheight = 0.06, 
-                             relwidth = 0.22)
+        # self.buttonMsg.place(relx = 0.77,
+        #                      rely = 0.008,
+        #                      relheight = 0.06, 
+        #                      relwidth = 0.22)
+        self.buttonMsg.pack()
+        
           
-        self.textCons.config(cursor = "arrow")
+        # self.textCons.config(cursor = "arrow")
           
-        # create a scroll bar
-        scrollbar = tk.Scrollbar(self.textCons)
+        # # create a scroll bar
+        # scrollbar = tk.Scrollbar(self.textCons)
           
-        # place the scroll bar 
-        # into the gui window
-        scrollbar.place(relheight = 1,
-                        relx = 0.974)
+        # # place the scroll bar 
+        # # into the gui window
+        # scrollbar.place(relheight = 1,
+        #                 relx = 0.974)
           
-        scrollbar.config(command = self.textCons.yview)
+        # scrollbar.config(command = self.textCons.yview)
           
-        self.textCons.config(state = tk.DISABLED)
+        # self.textCons.config(state = tk.DISABLED)
         
         
     def sendButton(self, msg):
-        self.textCons.config(state = tk.DISABLED)
+        #self.textCons.config(state = tk.DISABLED)
         self.msg = msg
         self.entryMsg.delete(0, tk.END)
         snd = threading.Thread(target = self.sendMessage)
@@ -173,17 +203,21 @@ class GUI:
     
     # function to send messages 
     def sendMessage(self):
-        self.textCons.config(state=tk.DISABLED)
+        #self.textCons.config(state=tk.DISABLED)
         while True:
             message = (f"{self.name}: {self.msg}")
             client.send(message.encode(FORMAT))    
-            break 
+            break
+        
+    def formatDiceString(self, dice):
+        #flip doesn't quite work yet
+        pass
                 
 g = GUI()
         
         
         
-        
+
         
         
         
