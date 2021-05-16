@@ -41,10 +41,13 @@ from goblin_util import select_best
 TOKEN = 'NTA2MzI2NzAyNDk0ODQyODgw.DrgqiA.DCiQQX5Ak5RZ_rOlB4teK8U-HKU'
 
 client = discord.Client()
+logout = False
 
 bound_channel = None
 threads = []
 stop_threads = False
+
+command_queue = []
 
 @client.event
 async def on_message(message):
@@ -54,6 +57,11 @@ async def on_message(message):
 	# we do not want the bot to reply to itself
 	if message.author == client.user:
 		return
+	
+	userName = message.author.nick
+	if userName == None:
+		userName = message.author.name
+	
 	print("message author:" + message.author.name)
 	
 		
@@ -66,9 +74,11 @@ async def on_message(message):
 		return 
 	
 	if text[0] == '!GBind':
+		global bound_channel
 		bound_channel = channel
 		msg = "```Goblin Bot bound to " + str(bound_channel.name) + ".```"
 		await channel.send(msg)
+	
 	
 	# GM is a special mode for macros
 	if text[0] == '!GM':
@@ -79,16 +89,26 @@ async def on_message(message):
 			return 
 	
 	
+	await command_handler(text, channel, userName)
+	
+	if logout:
+		await client.logout()
+
+	
+	return
+	
 	if text[0] == '!G' or text[0] == '!G!':
-		if text[0] == '!G!':
-			# working here, need to read in string and then resplit text
-			if input_history.get(message.author) == None:
-				msg = 'No input history found for user'
-				await channel.send(msg)
-				return
-			else:
-				text = input_history[message.author].split()
-				message.content = input_history[message.author]
+		
+### Repeated commands do not work in this scheme
+# 		if text[0] == '!G!':
+# 			# working here, need to read in string and then resplit text
+# 			if input_history.get(message.author) == None:
+# 				msg = 'No input history found for user'
+# 				await channel.send(msg)
+# 				return
+# 			else:
+# 				text = input_history[message.author].split()
+# 				message.content = input_history[message.author]
 	
 		if text[1] == 'give' or 'take' or 'uwu' or 'fortune' or 'starwars' or 'cryptography':
 			msg = Misc_Goblin.create_output(text)
@@ -194,6 +214,128 @@ async def on_message(message):
 		return
 	
     
+async def command_handler(text, channel, userNickname):
+	if text[0] == '!G' or text[0] == '!G!':
+		
+### Repeated commands do not work in this scheme
+# 		if text[0] == '!G!':
+# 			# working here, need to read in string and then resplit text
+# 			if input_history.get(message.author) == None:
+# 				msg = 'No input history found for user'
+# 				await channel.send(msg)
+# 				return
+# 			else:
+# 				text = input_history[message.author].split()
+# 				message.content = input_history[message.author]
+	
+		if text[1] == 'give' or 'take' or 'uwu' or 'fortune' or 'starwars' or 'cryptography':
+			msg = Misc_Goblin.create_output(text)
+		if text[1] == 'help':
+			msg = Help_Goblin.create_output(text)
+		if text[1] == 'roll':
+			msg = Roll_Goblin.create_output(text)
+			if msg == ':thinking:':
+				pass
+			else:
+				msg = '```' + userNickname + ' rolled: \n' + msg[3:]
+		if text[1] == 'lookup':
+			msg = Spell_Lookup_Goblin.create_output(text)
+		if text[1] == 'health':
+			msg = Health_Goblin.create_output(text)
+		if text[1] == 'init':
+			msg = Init_Goblin.create_output(text)
+		if text[1] == 'enemy':
+			msg = Enemy_Goblin.create_output(text)
+		if text[1] == 'char':
+			msg = Char_Goblin.create_output(text)
+			
+		# Super handy for testing things on-line
+		if text[1] == 'test':
+			msg = test(text)
+			
+			
+		#if text[1] == 'parse':
+		#	 input_str = ''.join(text[2:])
+		#	 msg = goblin_handle(input_str)
+
+		#await client.send_message(message.channel, msg)
+		
+		input_history[userNickname] = ' '.join(text)
+		try:
+			await channel.send(msg)
+		except:
+			print("Error sending msg: \"" + msg + "\"")
+			
+	elif text[0] == '!Gflip':
+		msg = '```The impartial goblin flips a coin and gets '
+		if(random.randrange(0, 1) == 0):
+			msg += "<heads>"
+		else:
+			msg += "<tails>"
+		msg += ' as the result.```'
+		await channel.send(msg)
+	elif text[0] == '!G4':
+		msg = userNickname + " rolled a: "
+		rand_num = str(random.randrange(1, 5))
+		msg += rand_num
+		if rand_num == '4':
+			msg = '**' + str(msg) + '**' 
+		await channel.send(msg)
+	elif text[0] == '!G6':
+		msg = userNickname + " rolled a: "
+		rand_num = str(random.randrange(1, 7))
+		msg += rand_num
+		if rand_num == '6':
+			msg = '**' + str(msg) + '**' 
+		await channel.send(msg)
+	elif text[0] == '!G8':
+		msg = userNickname + " rolled a: "
+		rand_num = str(random.randrange(1, 9))
+		msg += rand_num
+		if rand_num == '8':
+			msg = '**' + str(msg) + '**' 
+		await channel.send(msg)
+	elif text[0] == '!G10':
+		msg = userNickname + " rolled a: "
+		rand_num = str(random.randrange(1, 11))
+		msg += rand_num
+		if rand_num == '10':
+			msg = '**' + str(msg) + '**' 
+		await channel.send(msg)
+	elif text[0] == '!G12':
+		msg = userNickname + " rolled a: "
+		rand_num = str(random.randrange(1, 13))
+		msg += rand_num
+		if rand_num == '12':
+			msg = '**' + str(msg) + '**' 
+		await channel.send(msg)
+	elif text[0] == '!G20':
+		msg = userNickname + " rolled a: "
+		rand_num = str(random.randrange(1, 21))
+		msg += rand_num
+		if rand_num == '20':
+			msg = '**' + str(msg) + '**' 
+		await channel.send(msg)
+	elif text[0] == '!G100':
+		msg = userNickname + " rolled a: "
+		rand_num = str(random.randrange(1, 101))
+		msg += rand_num
+		if rand_num == '100':
+			msg = '**' + str(msg) + '**' 
+		await channel.send(msg)
+	elif text[0] == 'sleep' and text[1] == 'tite' and text[2] == 'goblin' and userNickname == "Xelasari":
+		print("does it get here?")
+		msg = "All in a day's work"
+		global logout
+		logout = True
+		await channel.send(msg)
+		#await client.logout()
+		
+	else:
+		return
+		
+	
+	pass
 
 #def roll_range(x, y):
 #	 #msg = message.author.name + " rolled a: "
@@ -284,13 +426,25 @@ def start_server():
 		thread.start()
 		
 def handle(conn, addr):
-    print("handle")
-    
-    connected = True
-    
-    while connected:
-        message = conn.recv(1024)
-        print("message: ", message.decode())
+	print("handle")
+	    
+	connected = True
+	    
+	while connected:
+		message = conn.recv(1024)
+		
+		msg = message.decode().split()
+		userName = msg[0]
+		command = msg[1:]
+		
+		print("user: " + userName)
+		print("command: " + ' '.join(command))
+		if bound_channel == None:
+			print("Error, no bound channel")
+		else:
+			global command_queue
+			command_queue.append((command, bound_channel, userName))
+			#await command_handler(command, bound_channel, userName)
 
 
 async def update_presence_loop():
@@ -308,6 +462,16 @@ async def update_presence_loop():
 		#sec_count += 1
 		await asyncio.sleep(30)
 		
+async def handle_command_loop():
+	await asyncio.sleep(1)
+	while(True):
+		global command_queue
+		if len(command_queue) == 0:
+			pass
+		else:
+			cmd = command_queue.pop()
+			await command_handler(cmd[0], cmd[1], cmd[2])
+		await asyncio.sleep(1)
 	
 @client.event
 async def on_ready():
@@ -360,6 +524,7 @@ def startup():
 if __name__ == "__main__":
 	try:
 		client.loop.create_task(update_presence_loop())
+		client.loop.create_task(handle_command_loop())
 		thread = threading.Thread(target=start_server)
 		thread.daemon = True
 		thread.start()
