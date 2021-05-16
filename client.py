@@ -141,6 +141,7 @@ class GUI:
         
         
     def sendButton(self, msg):
+        self.textCons.config(state = tk.DISABLED)
         self.msg = msg
         self.entryMsg.delete(0, tk.END)
         snd = threading.Thread(target = self.sendMessage)
@@ -170,12 +171,13 @@ class GUI:
                 client.close()
                 break 
     
+    # function to send messages 
     def sendMessage(self):
+        self.textCons.config(state=tk.DISABLED)
         while True:
-            message = "Hello"
-            client.send(message.encode(FORMAT))
-            break
-                
+            message = (f"{self.name}: {self.msg}")
+            client.send(message.encode(FORMAT))    
+            break 
                 
 g = GUI()
         
