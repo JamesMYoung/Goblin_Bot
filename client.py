@@ -57,17 +57,18 @@ class GUI:
         # to show chat window
         self.Window.deiconify()
         self.Window.title("GOBLIN BOT 3.0")
+        self.Window.minsize(680, 550)
         self.Window.resizable(width = False,
                               height = False)
         self.Window.configure(width = 680,
                               height = 550)#,
                               #bg = "#17202A")
         # self.labelHead = tk.Label(self.Window,
-        #                      bg = "#17202A", 
+        #                       bg = "#17202A", 
         #                       fg = "#EAECEE",
         #                       text = self.name ,
-        #                        font = "Helvetica 13 bold",
-        #                        pady = 5)
+        #                         font = "Helvetica 13 bold",
+        #                         pady = 5)
           
         # self.labelHead.place(relwidth = 1)
         # self.line = tk.Label(self.Window,
@@ -91,29 +92,49 @@ class GUI:
         #                     relwidth = 1, 
         #                     rely = 0.08)
         
-        self.button_flip = tk.Button(self.Window, text="flip")
-        self.button_flip.pack()
+        self.frame_buttonBox = tk.Frame()
+        self.frame_buttonBox.pack()
         
-        self.button_d4 = tk.Button(self.Window, text="d4")
-        self.button_d4.pack()
         
-        self.button_d6 = tk.Button(self.Window, text="d6")
-        self.button_d6.pack()
+        self.button_flip = tk.Button(self.frame_buttonBox,
+                                     text="flip",
+                                     command= lambda: self.formatDiceString("flip"))
+        self.button_flip.grid(row = 0, column = 0, sticky="ew")
         
-        self.button_d8 = tk.Button(self.Window, text="d8")
-        self.button_d8.pack()
+        self.button_d4 = tk.Button(self.frame_buttonBox,
+                                   text="d4",
+                                   command= lambda: self.formatDiceString("d4"))
+        self.button_d4.grid(row = 0, column = 1, sticky="ew")
         
-        self.button_d10 = tk.Button(self.Window, text="d10")
-        self.button_d10.pack()
+        self.button_d6 = tk.Button(self.frame_buttonBox,
+                                   text="d6",
+                                   command= lambda: self.formatDiceString("d6"))
+        self.button_d6.grid(row = 0, column = 2, sticky="ew")
         
-        self.button_d12 = tk.Button(self.Window, text="d12")
-        self.button_d12.pack()
+        self.button_d8 = tk.Button(self.frame_buttonBox,
+                                   text="d8",
+                                   command= lambda: self.formatDiceString("d8"))
+        self.button_d8.grid(row = 0, column = 3, sticky="ew")
         
-        self.button_d20 = tk.Button(self.Window, text="d20")
-        self.button_d20.pack()
+        self.button_d10 = tk.Button(self.frame_buttonBox,
+                                    text="d10",
+                                    command= lambda: self.formatDiceString("d10"))
+        self.button_d10.grid(row = 1, column = 0, sticky="ew")
         
-        self.button_d20 = tk.Button(self.Window, text="d100")
-        self.button_d20.pack()
+        self.button_d12 = tk.Button(self.frame_buttonBox,
+                                    text="d12",
+                                    command= lambda: self.formatDiceString("d12"))
+        self.button_d12.grid(row = 1, column = 1, sticky="ew")
+        
+        self.button_d20 = tk.Button(self.frame_buttonBox,
+                                    text="d20",
+                                    command= lambda: self.formatDiceString("d20"))
+        self.button_d20.grid(row = 1, column = 2, sticky="ew")
+        
+        self.button_d100 = tk.Button(self.frame_buttonBox,
+                                     text="d100",
+                                     command= lambda: self.formatDiceString("d100"))
+        self.button_d100.grid(row = 1, column = 3, sticky="ew")
         
         
         self.labelBottom = tk.Label(self.Window,
@@ -136,7 +157,7 @@ class GUI:
         #                     rely = 0.008,
         #                     relx = 0.011)
 		
-        self.entryMsg.pack()
+        self.entryMsg.pack(padx=100)
           
         self.entryMsg.focus()
           
@@ -211,7 +232,25 @@ class GUI:
         
     def formatDiceString(self, dice):
         #flip doesn't quite work yet
-        pass
+        #for now, roll 1d2
+        self.msg = "!G roll "
+        if dice == "flip":
+            self.msg += "1d2"
+        elif dice == "d4":
+            self.msg += "1d4"
+        elif dice == "d6":
+            self.msg += "1d6"
+        elif dice == "d8":
+            self.msg += "1d8"
+        elif dice == "d10":
+            self.msg += "1d10"
+        elif dice == "d12":
+            self.msg += "1d12"
+        elif dice == "d20":
+            self.msg += "1d20"
+        elif dice == "d100":
+            self.msg += "1d100"
+        self.sendMessage()
                 
 g = GUI()
         
