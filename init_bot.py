@@ -1,36 +1,57 @@
 import random
+import json
 
 class init_goblin:
     def __init__(self):
         print("Init Goblin created")
         self.entities = []
         try:
-            self.fp = open("data/player_init.data", "r+")
+            self.fp = open("data/player_init.json", "r+")
         except IOError:
-            self.fp = open("data/player_init.data", "w")
+            self.fp = open("data/player_init.json", "w")
             self.fp.close()
-            self.fp = open("data/player_init.data", "r+")
+            self.fp = open("data/player_init.json", "r+")
+        
+        
+        try:
+            self.entities = json.load(self.fp)
+            print("Valid macro file found")
+        except:
+            print("No valid player_init file found, will be created on shutdown")
+        
         
         #self.fp = open("player_init.data", "r+")
-        for line in self.fp:
-            #name init
-            words = line.split()
-            entity = {}
-            entity['name'] = words[0]
-            entity['init'] = int(words[1])
-            self.entities.append(entity)
-            print("-Added:" + entity['name']+"("
-                           + str(entity['init']) + ")")
+        # for line in self.fp:
+        #     #name init
+        #     words = line.split()
+        #     entity = {}
+        #     entity['name'] = words[0]
+        #     entity['init'] = int(words[1])
+        #     self.entities.append(entity)
+        #     print("-Added:" + entity['name']+"("
+        #                    + str(entity['init']) + ")")
 
     def __del__(self):
         self.fp.seek(0)
         self.fp.truncate(0)
-        for entity in self.entities:
-            hold_str = ""
-            hold_str += entity['name'] + " "
-            hold_str += str(entity['init']) + "\n"
-            self.fp.write(hold_str)
+		
+        print("Saving initiative list...")
+        json.dump(self.entities, self.fp)
+		
         self.fp.close()
+
+
+    # def __del__(self):
+    #     self.fp.seek(0)
+    #     self.fp.truncate(0)
+    #     for entity in self.entities:
+    #         hold_str = ""
+    #         hold_str += entity['name'] + " "
+    #         hold_str += str(entity['init']) + "\n"
+    #         self.fp.write(hold_str)
+    #     self.fp.close()
+        
+        
         
     def create_output(self, text):
         msg = ''
