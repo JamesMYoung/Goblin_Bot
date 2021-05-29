@@ -92,9 +92,21 @@ async def on_message(message):
     await command_handler(text, channel, userName)
     
     # handle all cleanup before client.logout
-    if logout:
+    if logout:   
+        # nothing to save
+        #Roll_Goblin.__del__()
+        # nothing to save
+        #Help_Goblin.__del__()
+        # nothing to save
+        #Spell_Lookup_Goblin.__del__()
+        # nothing to save
+        #Misc_Goblin.__del__()
+        Health_Goblin.__del__()
         Init_Goblin.__del__()
+        Enemy_Goblin.__del__()
+        Char_Goblin.__del__()
         Macro_Goblin.__del__()
+        
         await client.logout()
 
     
