@@ -4,6 +4,7 @@ import threading
 import tkinter as tk
 from tkinter import font
 from tkinter import ttk
+from tkinter import PhotoImage
 
 
 
@@ -95,44 +96,59 @@ class GUI:
         self.frame_buttonBox = tk.Frame()
         self.frame_buttonBox.pack()
         
-        
+        self.img_flip=PhotoImage(file='data/icons/flip.png');
         self.button_flip = tk.Button(self.frame_buttonBox,
                                      text="flip",
+                                     image=self.img_flip,
                                      command= lambda: self.formatDiceString("flip"))
         self.button_flip.grid(row = 0, column = 0, sticky="ew")
         
+        self.img_d4=PhotoImage(file='data/icons/d4.png');
         self.button_d4 = tk.Button(self.frame_buttonBox,
                                    text="d4",
+                                   image=self.img_d4,
                                    command= lambda: self.formatDiceString("d4"))
         self.button_d4.grid(row = 0, column = 1, sticky="ew")
         
+        self.img_d6=PhotoImage(file='data/icons/d6.png');
         self.button_d6 = tk.Button(self.frame_buttonBox,
                                    text="d6",
+                                   image=self.img_d6,
                                    command= lambda: self.formatDiceString("d6"))
         self.button_d6.grid(row = 0, column = 2, sticky="ew")
         
+        self.img_d8=PhotoImage(file='data/icons/d8.png');
         self.button_d8 = tk.Button(self.frame_buttonBox,
                                    text="d8",
+                                   image=self.img_d8,
                                    command= lambda: self.formatDiceString("d8"))
         self.button_d8.grid(row = 0, column = 3, sticky="ew")
         
+        self.img_d10=PhotoImage(file='data/icons/d10.png');
         self.button_d10 = tk.Button(self.frame_buttonBox,
                                     text="d10",
+                                   image=self.img_d10,
                                     command= lambda: self.formatDiceString("d10"))
         self.button_d10.grid(row = 1, column = 0, sticky="ew")
         
+        self.img_d12=PhotoImage(file='data/icons/d12.png');
         self.button_d12 = tk.Button(self.frame_buttonBox,
                                     text="d12",
+                                   image=self.img_d12,
                                     command= lambda: self.formatDiceString("d12"))
         self.button_d12.grid(row = 1, column = 1, sticky="ew")
         
+        self.img_d20=PhotoImage(file='data/icons/d20.png');
         self.button_d20 = tk.Button(self.frame_buttonBox,
                                     text="d20",
+                                   image=self.img_d20,
                                     command= lambda: self.formatDiceString("d20"))
         self.button_d20.grid(row = 1, column = 2, sticky="ew")
         
+        self.img_d100=PhotoImage(file='data/icons/d100.png');
         self.button_d100 = tk.Button(self.frame_buttonBox,
                                      text="d100",
+                                   image=self.img_d100,
                                      command= lambda: self.formatDiceString("d100"))
         self.button_d100.grid(row = 1, column = 3, sticky="ew")
         
