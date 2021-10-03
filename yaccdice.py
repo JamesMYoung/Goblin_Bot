@@ -164,7 +164,7 @@ def p_term_math(p):
     elif p[2] == '*':
         msg += str(p[1]) + ' * ' + str(p[3]) + '\n'
         msg += ' total: ' + str(p[1] * p[3]) + '\n'
-        p[0] = p[1] + p[3]
+        p[0] = p[1] * p[3]
     elif p[2] == '/':
         msg += str(p[1]) + ' / ' + str(p[3]) + '\n'
         msg += ' total: ' + str(p[1] / p[3]) + '\n'
