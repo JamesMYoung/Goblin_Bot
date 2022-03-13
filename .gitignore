@@ -39,3 +39,6 @@ __pycache__/goblin_bot2.cpython-36.pyc
 *.pyc
 data/player_init.json
 data/player_init.json
+data/deck_data.json
+data/drawn_data.json
+data/player_init.json
