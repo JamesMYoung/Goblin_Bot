@@ -26,6 +26,7 @@ from enemy_bot import enemy_goblin
 from char_bot import char_goblin
 from macro_bot import macro_goblin
 from deck_bot import deck_goblin
+from project_bot import project_goblin
 
 from goblin_util import select_best
 
@@ -108,6 +109,7 @@ async def on_message(message):
         Char_Goblin.__del__()
         Macro_Goblin.__del__()
         Deck_Goblin.__del__()
+        Project_Goblin.__del__()
         
         await client.logout()
 
@@ -272,6 +274,8 @@ async def command_handler(text, channel, userNickname):
             msg = Char_Goblin.create_output(text)
         if text[1] == 'deck':
             msg = Deck_Goblin.create_output(text)
+        if text[1] == 'project':
+            msg = Project_Goblin.create_output(text)
             
         # Super handy for testing things on-line
         if text[1] == 'test':
@@ -534,6 +538,8 @@ async def on_ready():
     Macro_Goblin = macro_goblin()
     global Deck_Goblin
     Deck_Goblin = deck_goblin()
+    global Project_Goblin
+    Project_Goblin = project_goblin()
     
     global input_history
     input_history = {}

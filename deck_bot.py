@@ -63,7 +63,6 @@ class deck_goblin:
         json.dump(self.drawn, self.draw_fp)
         
         self.draw_fp.close()
-        pass
         
     def create_output(self, text):
         msg = ''
@@ -165,6 +164,10 @@ class deck_goblin:
                 msg = "```No more spades remain```"
                 return msg
 
+        elif len(text) > 3:
+            msg = "```" + arg + " not recognized```"
+            return msg
+            
         else:
             card = self.deck.pop()
             
