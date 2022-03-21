@@ -117,7 +117,7 @@ class deck_goblin:
         
         
         if len(text) > 3:
-            arg = str(text[3])
+            arg = str(text[3]).lower()
         
         
         if arg == 'club' or arg == 'clubs':

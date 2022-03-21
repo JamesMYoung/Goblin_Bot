@@ -42,6 +42,20 @@ class project_goblin:
             
             
             
+        try:
+            self.date_fp = open("data/date_data.json", "r+")
+        except IOError:
+            self.date_fp = open("data/date_data.json", "w")
+            self.date_fp.close()
+            self.date_fp = open("data/date_data.json", "r+")
+            
+ 
+        try:
+            self.week_counter = json.load(self.date_fp)
+            print("Valid date_data file found")
+        except:
+            print("No valid date_data file found, will be created on shutdown")    
+            
             
             
             
@@ -68,6 +82,16 @@ class project_goblin:
         self.completed_fp.close()
         
         
+        
+        
+        self.date_fp.seek(0)
+        self.date_fp.truncate(0)
+        
+        json.dump(self.week_counter, self.date_fp)
+        
+        self.date_fp.close()
+        
+        
     def create_output(self, text):
         msg = ''
         
@@ -82,6 +106,8 @@ class project_goblin:
             msg = self.completed_list()
         if text[2] == 'delete':
             msg = self.delete_project(text)
+        if text[2] == 'complete':
+            msg = self.complete_project(text)
 
         return msg
         
@@ -150,6 +176,7 @@ class project_goblin:
                 
                 self.projects_completed.append(save_str)
                 self.projects_in_progress.remove(p)
+                continue
             
         msg += '```'
 
@@ -200,10 +227,40 @@ class project_goblin:
                 msg += ' deleted'
                 self.projects_in_progress.remove(p)
                 break
+            counter += 1
         
         msg += '```'
         
         return msg
+        
+    def complete_project(self, text):
+        msg = ''
+        #!G project complete 0
+        msg = '```'
+        
+        complete_num = int(text[3])
+        
+        counter = 0
+        for p in self.projects_in_progress:
+            if counter == complete_num:
+                msg += p['name']
+                msg += ' completed!'
+                self.projects_in_progress.remove(p)
+                
+                save_str = '\"' + p['name']
+                save_str += '\" finished on Week '
+                save_str += str(self.week_counter)
+                
+                self.projects_completed.append(save_str)
+                self.projects_in_progress.remove(p)
+                break
+            counter += 1
+            
+        msg += '```'
+        
+        return msg
+        
+        
         
         
         
