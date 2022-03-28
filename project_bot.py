@@ -155,6 +155,15 @@ class project_goblin:
         msg += '\n'
         
         self.week_counter += 1
+        
+        if len(self.projects_in_progress) == 0:
+            msg += '\n-----------------------\n'
+            msg += 'Projects completed this week:\n'
+            
+            msg += '```'
+            return msg
+        
+        
 
         for p in self.projects_in_progress:
             msg += p['name'] + ': Weeks remaining '
@@ -165,19 +174,41 @@ class project_goblin:
     
         msg += '\n-----------------------\n'
         msg += 'Projects completed this week:\n'
-        for p in self.projects_in_progress:
-            if p['time'] == 0:
-                msg += p['name']
+        
+        list_len = len(self.projects_in_progress)
+        
+        counter = 0
+        
+        while(counter < list_len):
+            if self.projects_in_progress[counter]['time'] == 0:
+                msg += self.projects_in_progress[counter]['name']
                 msg += '\n'
                 
-                save_str = '\"' + p['name']
+                save_str = '\"' + self.projects_in_progress[counter]['name']
                 save_str += '\" finished on Week '
                 save_str += str(self.week_counter)
                 
                 self.projects_completed.append(save_str)
-                self.projects_in_progress.remove(p)
-                continue
-            
+                self.projects_in_progress.remove(self.projects_in_progress[counter])
+                
+                list_len -= 1
+                counter -= 1
+            counter += 1
+        
+        
+        #for p in self.projects_in_progress:
+        #    if p['time'] == 0:
+        #        msg += p['name']
+        #        msg += '\n'
+        #        
+        #        save_str = '\"' + p['name']
+        #        save_str += '\" finished on Week '
+        #        save_str += str(self.week_counter)
+        #        
+        #        self.projects_completed.append(save_str)
+        #        self.projects_in_progress.remove(p)
+        #        continue
+        #    
         msg += '```'
 
         return msg
