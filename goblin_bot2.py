@@ -39,8 +39,8 @@ from goblin_util import select_best
 #    # note that on windows this DLL is automatically provided for you
 #    discord.opus.load_opus('opus')
 
-
-TOKEN = 'NTA2MzI2NzAyNDk0ODQyODgw.DrgqiA.DCiQQX5Ak5RZ_rOlB4teK8U-HKU'
+f = open("token.txt", "r")
+TOKEN = f.read()
 
 client = discord.Client()
 logout = False
